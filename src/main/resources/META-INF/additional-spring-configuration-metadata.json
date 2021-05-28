@@ -1,0 +1,6 @@
+{"properties": [
+  {
+    "name": "mongo-adepte.debug",
+    "defaultValue": false
+  }
+]}
