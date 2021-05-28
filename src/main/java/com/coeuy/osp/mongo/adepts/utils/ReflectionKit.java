@@ -1,13 +1,6 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.mapping.context.MappingContext;
-import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
-import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
-import org.springframework.lang.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -42,7 +35,4 @@ public final class ReflectionKit {
         }
         return (Class<?>) params[index];
     }
-
-
-
 }

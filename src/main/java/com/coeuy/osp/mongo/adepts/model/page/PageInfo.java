@@ -7,6 +7,11 @@ import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
+ * <p>
+ * 分页信息
+ * 作为分页查询的传输对象
+ * </p>
+ *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/15 14:48
  */

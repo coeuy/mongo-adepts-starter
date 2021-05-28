@@ -1,13 +1,16 @@
 package com.coeuy.osp.mongo.adepts.model.page;
 
 import lombok.Data;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 
 /**
+ * <p>
+ * Mongo Data 分页对象
+ * {@link Pageable}
+ * </p>
  *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/15 15:41
@@ -21,17 +24,18 @@ public class PageQuery implements Pageable, Serializable {
     public PageQuery(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
     }
-    public PageQuery(Integer current,Integer size) {
-        this.pageInfo = PageInfo.page(current,size);
+
+    public PageQuery(Integer current, Integer size) {
+        this.pageInfo = PageInfo.page(current, size);
     }
-    public PageQuery(Integer current,Integer size,Sort sort) {
-        this.pageInfo = new  PageInfo(current,size,sort);
+
+    public PageQuery(Integer current, Integer size, Sort sort) {
+        this.pageInfo = new PageInfo(current, size, sort);
     }
 
     public static PageQuery page(PageInfo pageInfo) {
         return new PageQuery(pageInfo);
     }
-
 
 
     @Override
@@ -46,7 +50,7 @@ public class PageQuery implements Pageable, Serializable {
 
     @Override
     public long getOffset() {
-        return (pageInfo.getCurrent() - 1) * pageInfo.getSize();
+        return (long) (pageInfo.getCurrent() - 1) * pageInfo.getSize();
     }
 
     @Override
@@ -62,7 +66,7 @@ public class PageQuery implements Pageable, Serializable {
 
     @Override
     public Pageable next() {
-        return new PageQuery(this.getPageNumber()+1,this.getPageSize());
+        return new PageQuery(this.getPageNumber() + 1, this.getPageSize());
     }
 
     @Override
@@ -72,7 +76,7 @@ public class PageQuery implements Pageable, Serializable {
 
     @Override
     public Pageable first() {
-       return new PageQuery(0,this.getPageSize());
+        return new PageQuery(0, this.getPageSize());
     }
 
     @Override

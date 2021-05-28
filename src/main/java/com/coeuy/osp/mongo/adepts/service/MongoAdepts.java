@@ -1,11 +1,11 @@
 package com.coeuy.osp.mongo.adepts.service;
 
+import com.coeuy.osp.mongo.adepts.handler.QueryHandler;
+import com.coeuy.osp.mongo.adepts.handler.UpdateHandler;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageQuery;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
-import com.coeuy.osp.mongo.adepts.utils.CriteriaParseUtils;
-import com.coeuy.osp.mongo.adepts.utils.UpdateParseUtils;
 import com.google.common.collect.Lists;
 import com.mongodb.client.result.DeleteResult;
 import lombok.NonNull;
@@ -65,7 +65,7 @@ public class MongoAdepts {
     public <T> T getOne(QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.findOne(CriteriaParseUtils.parse(queryWrapper), entityClass, collectionName);
+        return mongoTemplate.findOne(QueryHandler.parse(queryWrapper), entityClass, collectionName);
     }
 
     public <T> T getById(Serializable id, Class<T> entityClass) {
@@ -78,7 +78,7 @@ public class MongoAdepts {
     }
 
     public <T> List<T> list(QueryWrapper<T> queryWrapper) {
-        return mongoTemplate.find(CriteriaParseUtils.parse(queryWrapper), queryWrapper.getEntityClass());
+        return mongoTemplate.find(QueryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
     }
 
     public <T> List<T> listByIds(Collection<? extends Serializable> idList, Class<T> entityClass) {
@@ -97,7 +97,7 @@ public class MongoAdepts {
     public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Query query = CriteriaParseUtils.parse(queryWrapper);
+        Query query = QueryHandler.parse(queryWrapper);
         log.debug("");
         if (queryWrapper.getTextSearch() != null) {
             query.addCriteria(TextCriteria.forDefaultLanguage().matching(queryWrapper.getTextSearch()));
@@ -127,34 +127,34 @@ public class MongoAdepts {
     public <T> boolean update(QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Update update = UpdateParseUtils.parse(queryWrapper);
+        Update update = UpdateHandler.parse(queryWrapper);
         if (Objects.isNull(update)) {
             log.warn("更新操作不执行");
             return true;
         }
-        return mongoTemplate.updateFirst(CriteriaParseUtils.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
+        return mongoTemplate.updateFirst(QueryHandler.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
     }
 
     public <T> T findAndModify(QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
 
-        Update update = UpdateParseUtils.parse(queryWrapper);
+        Update update = UpdateHandler.parse(queryWrapper);
         if (Objects.isNull(update)) {
             return null;
         }
-        return mongoTemplate.findAndModify(CriteriaParseUtils.parse(queryWrapper), update, entityClass, collectionName);
+        return mongoTemplate.findAndModify(QueryHandler.parse(queryWrapper), update, entityClass, collectionName);
     }
 
 
     public <T> boolean updateMulti(QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Update update = UpdateParseUtils.parse(queryWrapper);
+        Update update = UpdateHandler.parse(queryWrapper);
         if (Objects.isNull(update)) {
             return true;
         }
-        return mongoTemplate.updateMulti(CriteriaParseUtils.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
+        return mongoTemplate.updateMulti(QueryHandler.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
     }
 
 
@@ -162,7 +162,7 @@ public class MongoAdepts {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
 
-        final Query parse = CriteriaParseUtils.parse(queryWrapper);
+        final Query parse = QueryHandler.parse(queryWrapper);
         log.info("删除数据操作监听:\n - {}", parse);
         DeleteResult remove = mongoTemplate.remove(parse, entityClass, collectionName);
         return remove.wasAcknowledged();
@@ -176,7 +176,7 @@ public class MongoAdepts {
 
 
     public <T> int count(QueryWrapper<T> queryWrapper) {
-        return (int) mongoTemplate.count(CriteriaParseUtils.parse(queryWrapper), queryWrapper.getEntityClass());
+        return (int) mongoTemplate.count(QueryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
     }
 
     public <T> boolean deleteAll(Class<T> entityClass) {
@@ -191,7 +191,7 @@ public class MongoAdepts {
     public <T> boolean exists(QueryWrapper<T> queryWrapper) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.exists(CriteriaParseUtils.parse(queryWrapper), entityClass, collectionName);
+        return mongoTemplate.exists(QueryHandler.parse(queryWrapper), entityClass, collectionName);
     }
 
     public <T> boolean exists(Class<T> entityClass) {
@@ -202,7 +202,7 @@ public class MongoAdepts {
     public <T> List<T> group(QueryWrapper<T> queryWrapper, String... keys) {
         Class<T> entityClass = queryWrapper.getEntityClass();
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Criteria criteria = CriteriaParseUtils.parseCriteria(queryWrapper);
+        Criteria criteria = QueryHandler.parseCriteria(queryWrapper);
         TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
                 entityClass,
                 Aggregation.match(criteria),
@@ -216,7 +216,7 @@ public class MongoAdepts {
         Class<T> entityClass = queryWrapper.getEntityClass();
         PageQuery page = PageQuery.page(pageInfo);
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Criteria criteria = CriteriaParseUtils.parseCriteria(queryWrapper);
+        Criteria criteria = QueryHandler.parseCriteria(queryWrapper);
         TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
                 entityClass,
                 Aggregation.match(criteria),

@@ -1,8 +1,9 @@
-package com.coeuy.osp.mongo.adepts.utils;
+package com.coeuy.osp.mongo.adepts.handler;
 
 import com.coeuy.osp.mongo.adepts.model.query.Option;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
+import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -15,14 +16,16 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * <p>条件构造器解析工具<p/>
+ * <p>
+ * 条件构造器解析工具
+ * <p/>
  *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/16 17:13
  */
 
 @Slf4j
-public class CriteriaParseUtils {
+public class QueryHandler {
 
     public static final String X = "*";
 
@@ -102,7 +105,6 @@ public class CriteriaParseUtils {
             case LT:
                 wrapper.getConditions().forEach(w -> criteria.and(w.getKey()).lt(w.getValue()));
                 break;
-
             case LIKE:
                 wrapper.getConditions().forEach(
                         w -> {
@@ -112,7 +114,6 @@ public class CriteriaParseUtils {
                                 value = ((String) value).replace(X, "");
                             }
                             criteria.and(w.getKey()).regex("^.*" + value + ".*$");
-
                         });
                 break;
             case LIKE_LEFT:
@@ -123,7 +124,6 @@ public class CriteriaParseUtils {
                         value = ((String) value).replace(X, "");
                     }
                     criteria.and(w.getKey()).regex("^" + value + ".*$");
-
                 });
                 break;
             case LIKE_RIGHT:
@@ -134,7 +134,6 @@ public class CriteriaParseUtils {
                         value = ((String) value).replace(X, "");
                     }
                     criteria.and(w.getKey()).regex("^.*" + value + "$");
-
                 });
                 break;
             default:

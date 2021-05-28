@@ -5,6 +5,10 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
+ * <p>
+ * 分页排序
+ * </p>
+ *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/15 16:38
  */

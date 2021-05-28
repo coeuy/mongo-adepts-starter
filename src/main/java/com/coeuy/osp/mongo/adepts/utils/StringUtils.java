@@ -3,7 +3,7 @@ package com.coeuy.osp.mongo.adepts.utils;
 import java.util.regex.Pattern;
 
 /**
- * <p> Class </p>
+ * <p> 字符工具类 </p>
  *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/5/18 7:54 下午
@@ -23,19 +23,6 @@ public class StringUtils {
      */
     public static final char UNDERLINE = '_';
 
-
-    /**
-     * 判断字符串是否为空
-     *
-     * @param cs 需要判断字符串
-     * @return 判断结果
-     */
-    @Deprecated
-    public static boolean isEmpty(CharSequence cs) {
-        return isBlank(cs);
-    }
-
-
     public static boolean isBlank(final CharSequence cs) {
         if (cs == null) {
             return true;
@@ -51,31 +38,10 @@ public class StringUtils {
         return true;
     }
 
-    /**
-     * 判断字符串是否不为空
-     *
-     * @param cs 需要判断字符串
-     * @return 判断结果
-     */
-    @Deprecated
-    public static boolean isNotEmpty(final CharSequence cs) {
-        return !isEmpty(cs);
-    }
-
     public static boolean isNotBlank(final CharSequence cs) {
         return !isBlank(cs);
     }
 
-    /**
-     * 猜测方法属性对应的 Getter 名称，具体规则请参考 JavaBeans 规范
-     *
-     * @param name 属性名称
-     * @param type 属性类型
-     * @return 返回猜测的名称
-     */
-    public static String guessGetterName(String name, Class<?> type) {
-        return boolean.class == type ? name.startsWith("is") ? name : "is" + upperFirst(name) : "get" + upperFirst(name);
-    }
 
     /**
      * 大写第一个字母
@@ -153,7 +119,6 @@ public class StringUtils {
         return Pattern.matches(regex, input);
     }
 
-
     /**
      * 拼接字符串第二个字符串第一个字母大写
      */
@@ -223,7 +188,6 @@ public class StringUtils {
         return false;
     }
 
-
     /**
      * 是否为CharSequence类型
      *
@@ -233,7 +197,6 @@ public class StringUtils {
     public static boolean isCharSequence(Class<?> clazz) {
         return clazz != null && CharSequence.class.isAssignableFrom(clazz);
     }
-
 
     /**
      * 是否为Boolean类型(包含普通类型)

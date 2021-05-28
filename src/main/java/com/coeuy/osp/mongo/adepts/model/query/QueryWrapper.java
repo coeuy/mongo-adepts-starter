@@ -1,6 +1,5 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
-import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p> 查询对象包装器 </p>
+ * <p>
+ * 查询对象包装器
+ * </p>
  *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/16 10:33
@@ -162,7 +163,7 @@ public class QueryWrapper<T> implements Serializable {
     /**
      * 模糊匹配(全部)
      *
-     * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param key     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
@@ -177,7 +178,7 @@ public class QueryWrapper<T> implements Serializable {
     /**
      * 模糊匹配（左边）
      *
-     * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param key     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
@@ -192,8 +193,8 @@ public class QueryWrapper<T> implements Serializable {
     /**
      * 模糊匹配（右边）
      *
-     * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param  keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param key     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
 
@@ -243,8 +244,6 @@ public class QueryWrapper<T> implements Serializable {
         this.wrappers.add(new Wrapper(Option.UPDATE, conditions));
         return this;
     }
-
-
 
 
     /**
@@ -314,7 +313,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> inc(String key,Integer number) {
+    public QueryWrapper<T> inc(String key, Integer number) {
         Condition condition = new Condition(key, number);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);

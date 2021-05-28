@@ -21,6 +21,7 @@ public class MongoAdeptsConfiguration {
      */
     private boolean debug;
 
+
     public MongoAdeptsConfiguration() {
         System.out.println(".    .                         .       .          .      \n" +
                 "|\\  /|                        / \\      |         _|_     \n" +
@@ -28,7 +29,7 @@ public class MongoAdeptsConfiguration {
                 "|    |(   )|  |(   |(   )   /     \\(   |(.-' |   )|  `--.\n" +
                 "'    ' `-' '  `-`-`| `-'   '       ``-'`-`--'|`-' `-'`--'\n" +
                 "                ._.'                         |           \n" +
-                "                                             '           \n"+
-                "\n version:");
+                "                                             '           \n" +
+                "\n version: 1.0.0-SNAPSHOT");
     }
 }

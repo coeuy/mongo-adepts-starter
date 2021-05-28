@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * <p>
+ * 条件构造器键值对象
+ * </p>
+ *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/16 16:08
  */

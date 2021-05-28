@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * Explain
+ * 索引搜索
  * </p>
  *
  * @author Yarnk .  yarnk@coeuy.com

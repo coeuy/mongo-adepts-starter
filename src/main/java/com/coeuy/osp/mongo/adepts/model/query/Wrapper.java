@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * <p>
+ * 条件包装
+ * </p>
+ *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/16 16:28
  */

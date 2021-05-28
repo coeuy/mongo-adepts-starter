@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * Explain
+ * Exception
  * </p>
  *
  * @author Yarnk .  yarnk@coeuy.com

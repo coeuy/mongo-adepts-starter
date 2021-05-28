@@ -10,6 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * <p>
+ * 分页结果
+ * </p>
+ *
  * @author Yarnk .  yarnk@coeuy.com
  * @date 2020/6/15 14:23
  */

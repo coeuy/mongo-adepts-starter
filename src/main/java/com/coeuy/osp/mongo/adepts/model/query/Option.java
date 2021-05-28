@@ -3,7 +3,9 @@ package com.coeuy.osp.mongo.adepts.model.query;
 import java.io.Serializable;
 
 /**
- * <p> 条件枚举类 </p>
+ * <p>
+ * 条件枚举类
+ * </p>
  *
  * @author Yarnk .  yarnk@coeuy.com
  */
@@ -29,6 +31,7 @@ public enum Option implements Serializable {
     UPDATE,
     UN_UPDATE,
     PUSH,
+    PULL,
     GROUP_BY,
     GE_AND_LE,
     LIKE;
