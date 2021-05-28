@@ -27,11 +27,11 @@ public class WrapperHandler {
      * @param queryWrapper queryWrapper
      * @return boolean
      */
-    public boolean verifyEqNoBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyEqNoBlank(QueryWrapper queryWrapper) {
         return verifyOptionNoBlank(queryWrapper, EQ);
     }
 
-    private boolean verifyOptionNoBlank(QueryWrapper<?> queryWrapper, Option... options) {
+    private boolean verifyOptionNoBlank(QueryWrapper queryWrapper, Option... options) {
         List<Wrapper> wrappers = queryWrapper.getWrappers();
         if (CollectionUtils.isEmpty(wrappers)) {
             return false;
@@ -56,23 +56,23 @@ public class WrapperHandler {
      * @param queryWrapper queryWrapper
      * @return boolean
      */
-    public boolean verifyConditionNoBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyConditionNoBlank(QueryWrapper queryWrapper) {
         return verifyOptionNoBlank(queryWrapper, EQ, LIKE, LIKE_LEFT, LIKE_RIGHT, NE, GE, GE_AND_LE, LE, IN, NOT_IN);
     }
 
-    public boolean verifyConditionIsBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyConditionIsBlank(QueryWrapper queryWrapper) {
         return !verifyConditionNoBlank(queryWrapper);
     }
 
-    public boolean verifyNeNoBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyNeNoBlank(QueryWrapper queryWrapper) {
         return verifyOptionNoBlank(queryWrapper, NE);
     }
 
-    public boolean verifyInNoBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyInNoBlank(QueryWrapper queryWrapper) {
         return verifyOptionNoBlank(queryWrapper, IN);
     }
 
-    public boolean verifyEqIsBlank(QueryWrapper<?> queryWrapper) {
+    public boolean verifyEqIsBlank(QueryWrapper queryWrapper) {
         return !verifyEqNoBlank(queryWrapper);
     }
 }

@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 public class Wrappers {
-    public static <T> QueryWrapper<T> query() {
-        return new QueryWrapper<>();
+    public static QueryWrapper query() {
+        return new QueryWrapper();
     }
 }

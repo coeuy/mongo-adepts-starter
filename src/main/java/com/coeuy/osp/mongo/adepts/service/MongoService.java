@@ -30,8 +30,8 @@ public class MongoService<T> {
         return (Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1);
     }
 
-    public T getOne(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.getOne(queryWrapper);
+    public T getOne(QueryWrapper queryWrapper) {
+        return mongoAdepts.getOne(queryWrapper, entityClass);
     }
 
     public T getById(Serializable id) {
@@ -42,8 +42,8 @@ public class MongoService<T> {
         return mongoAdepts.list(entityClass);
     }
 
-    public List<T> list(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.list(queryWrapper);
+    public List<T> list(QueryWrapper queryWrapper) {
+        return mongoAdepts.list(queryWrapper, entityClass);
     }
 
     public List<T> listByIds(Collection<? extends Serializable> idList) {
@@ -55,8 +55,8 @@ public class MongoService<T> {
         return mongoAdepts.page(pageInfo, entityClass);
     }
 
-    public PageResult<T> page(PageInfo pageInfo, QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.page(pageInfo, queryWrapper);
+    public PageResult<T> page(PageInfo pageInfo, QueryWrapper queryWrapper) {
+        return mongoAdepts.page(pageInfo, queryWrapper, entityClass);
     }
 
 
@@ -72,48 +72,48 @@ public class MongoService<T> {
         return mongoAdepts.save(t);
     }
 
-    public boolean update(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.update(queryWrapper);
+    public boolean update(QueryWrapper queryWrapper) {
+        return mongoAdepts.update(queryWrapper, entityClass);
     }
 
-    public T findAndModify(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.findAndModify(queryWrapper);
+    public T findAndModify(QueryWrapper queryWrapper) {
+        return mongoAdepts.findAndModify(queryWrapper, entityClass);
     }
 
-    public boolean updateMulti(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.updateMulti(queryWrapper);
+    public boolean updateMulti(QueryWrapper queryWrapper) {
+        return mongoAdepts.updateMulti(queryWrapper, entityClass);
     }
 
-    public boolean delete(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.delete(queryWrapper);
+    public boolean delete(QueryWrapper queryWrapper) {
+        return mongoAdepts.delete(queryWrapper, entityClass);
     }
 
     public boolean delete(T t) {
         return mongoAdepts.delete(t, entityClass);
     }
 
-    public int count(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.count(queryWrapper);
+    public int count(QueryWrapper queryWrapper) {
+        return mongoAdepts.count(queryWrapper, entityClass);
     }
 
     public boolean removeAll() {
         return mongoAdepts.deleteAll(entityClass);
     }
 
-    public boolean exists(QueryWrapper<T> queryWrapper) {
-        return mongoAdepts.exists(queryWrapper);
+    public boolean exists(QueryWrapper queryWrapper) {
+        return mongoAdepts.exists(queryWrapper, entityClass);
     }
 
     public boolean collectionExists() {
         return mongoAdepts.exists(entityClass);
     }
 
-    public List<T> group(QueryWrapper<T> queryWrapper, String... keys) {
-        return mongoAdepts.group(queryWrapper, keys);
+    public List<T> group(QueryWrapper queryWrapper, String... keys) {
+        return mongoAdepts.group(queryWrapper, entityClass, keys);
     }
 
-    public PageResult<T> group(PageInfo pageInfo, QueryWrapper<T> queryWrapper, String... keys) {
-        return mongoAdepts.group(pageInfo, queryWrapper, keys);
+    public PageResult<T> group(PageInfo pageInfo, QueryWrapper queryWrapper, String... keys) {
+        return mongoAdepts.group(pageInfo, queryWrapper, entityClass, keys);
     }
 
 

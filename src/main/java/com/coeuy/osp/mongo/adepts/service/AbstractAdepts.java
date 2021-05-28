@@ -74,8 +74,7 @@ public abstract class AbstractAdepts {
         return context.getRequiredPersistentEntity(entityClass).getCollection();
     }
 
-    public <T> T getOne(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> T getOne(QueryWrapper queryWrapper, Class<T> entityClass) {
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         return mongoTemplate.findOne(queryHandler.parse(queryWrapper), entityClass, collectionName);
     }
@@ -89,8 +88,8 @@ public abstract class AbstractAdepts {
         return mongoTemplate.findAll(entityClass);
     }
 
-    public <T> List<T> list(QueryWrapper<T> queryWrapper) {
-        return mongoTemplate.find(queryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
+    public <T> List<T> list(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return mongoTemplate.find(queryHandler.parse(queryWrapper), entityClass);
     }
 
     public <T> List<T> listByIds(Collection<? extends Serializable> idList, Class<T> entityClass) {
@@ -106,8 +105,7 @@ public abstract class AbstractAdepts {
         return new PageResult<>(list, total, page);
     }
 
-    public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass) {
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         Query query = queryHandler.parse(queryWrapper);
         if (queryWrapper.getTextSearch() != null) {
@@ -133,13 +131,12 @@ public abstract class AbstractAdepts {
     }
 
 
-    public <T> boolean update(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> boolean update(QueryWrapper queryWrapper, Class<T> entityClass) {
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         Update update = updateHandler.parse(queryWrapper);
 
         if (Objects.isNull(update)) {
-            if (properties.isDebug()){
+            if (properties.isDebug()) {
                 log.warn("条件构造不满足更新操作");
             }
             return false;
@@ -147,8 +144,8 @@ public abstract class AbstractAdepts {
         return mongoTemplate.updateFirst(queryHandler.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
     }
 
-    public <T> T findAndModify(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> T findAndModify(QueryWrapper queryWrapper, Class<T> entityClass) {
+
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
 
         Update update = updateHandler.parse(queryWrapper);
@@ -159,8 +156,8 @@ public abstract class AbstractAdepts {
     }
 
 
-    public <T> boolean updateMulti(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> boolean updateMulti(QueryWrapper queryWrapper, Class<T> entityClass) {
+
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         Update update = updateHandler.parse(queryWrapper);
         if (Objects.isNull(update)) {
@@ -170,12 +167,12 @@ public abstract class AbstractAdepts {
     }
 
 
-    public <T> boolean delete(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> boolean delete(QueryWrapper queryWrapper, Class<T> entityClass) {
+
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
 
         final Query parse = queryHandler.parse(queryWrapper);
-        if (properties.isDebug()){
+        if (properties.isDebug()) {
             log.info("删除数据操作监听:\n - {}", parse);
         }
         DeleteResult remove = mongoTemplate.remove(parse, entityClass, collectionName);
@@ -189,12 +186,12 @@ public abstract class AbstractAdepts {
     }
 
 
-    public <T> int count(QueryWrapper<T> queryWrapper) {
-        return (int) mongoTemplate.count(queryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
+    public <T> int count(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return (int) mongoTemplate.count(queryHandler.parse(queryWrapper), entityClass);
     }
 
     public <T> boolean deleteAll(Class<T> entityClass) {
-        if (properties.isDebug()){
+        if (properties.isDebug()) {
             log.warn("删除集合全部数据操作监听:\n - {}", entityClass);
         }
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
@@ -205,8 +202,8 @@ public abstract class AbstractAdepts {
         return true;
     }
 
-    public <T> boolean exists(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> boolean exists(QueryWrapper queryWrapper, Class<T> entityClass) {
+
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         return mongoTemplate.exists(queryHandler.parse(queryWrapper), entityClass, collectionName);
     }
@@ -216,8 +213,8 @@ public abstract class AbstractAdepts {
         return mongoTemplate.collectionExists(collectionName) || mongoTemplate.collectionExists(entityClass);
     }
 
-    public <T> List<T> group(QueryWrapper<T> queryWrapper, String... keys) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+    public <T> List<T> group(QueryWrapper queryWrapper, Class<T> entityClass, String... keys) {
+
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         Criteria criteria = queryHandler.parseCriteria(queryWrapper);
         TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
@@ -228,10 +225,10 @@ public abstract class AbstractAdepts {
         );
         return mongoTemplate.aggregate(aggregation, collectionName, entityClass).getMappedResults();
     }
-    
 
-    public <T> PageResult<T> group(PageInfo pageInfo, QueryWrapper<T> queryWrapper, String... keys) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
+
+    public <T> PageResult<T> group(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass, String... keys) {
+
         PageQuery page = PageQuery.page(pageInfo);
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         Criteria criteria = queryHandler.parseCriteria(queryWrapper);

@@ -36,9 +36,10 @@ mongo-adepts:
 
 #### 3. 代码中使用
 
-- 方式1 ：获取Bean调用
+- 方式1 ：获取Bean调用(需要传 Class<?>)
 
 ```java
+import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,7 +49,13 @@ public class UserService {
     @Resource
     private MongoAdepts mongoAdepts;
 
-    public void mongo() {
+    public void getOne() {
+        QueryWrapper wrapper = new QueryWrapper().eq("username", "Superman");
+        User user = mongoAdepts.getOne(wrapper,User.class);
+        System.out.println(user);
+    }
+
+    public void insert() {
         User user = new User();
         user.setUsername("Superman");
         User insert = mongoAdepts.insert(user);

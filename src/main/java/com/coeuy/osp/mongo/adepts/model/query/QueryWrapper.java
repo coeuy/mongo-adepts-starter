@@ -15,14 +15,9 @@ import java.util.List;
  * @date 2020/6/16 10:33
  */
 @Data
-public class QueryWrapper<T> implements Serializable {
+public class QueryWrapper implements Serializable {
 
     private static final long serialVersionUID = -8672871214331349354L;
-
-    /**
-     * PO类
-     */
-    private T entity;
     /**
      * 防止多次比较
      */
@@ -31,19 +26,17 @@ public class QueryWrapper<T> implements Serializable {
      * 条件集合
      */
     private List<Wrapper> wrappers = new ArrayList<>();
-    /**
-     * 类型
-     */
-    private Class<T> entityClass;
+
 
     private String textSearch;
+
 
     /**
      * 等于
      *
      * @return Query
      */
-    public QueryWrapper<T> eq(String key, Object value) {
+    public QueryWrapper eq(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -57,7 +50,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> ne(String key, Object value) {
+    public QueryWrapper ne(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -70,7 +63,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> in(String key, Object value) {
+    public QueryWrapper in(String key, Object value) {
         if (!compared) {
             compared = true;
             Condition condition = new Condition(key, value);
@@ -86,7 +79,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> ge(String key, Object value) {
+    public QueryWrapper ge(String key, Object value) {
         if (!compared) {
             compared = true;
             Condition condition = new Condition(key, value);
@@ -102,7 +95,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> gt(String key, Object value) {
+    public QueryWrapper gt(String key, Object value) {
         if (!compared) {
             compared = true;
             Condition condition = new Condition(key, value);
@@ -119,7 +112,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> le(String key, Object value) {
+    public QueryWrapper le(String key, Object value) {
         if (!compared) {
             compared = true;
             Condition condition = new Condition(key, value);
@@ -136,7 +129,7 @@ public class QueryWrapper<T> implements Serializable {
      * @param key 注意不能使用多个比较值
      * @return Query
      */
-    public QueryWrapper<T> lt(String key, Object value) {
+    public QueryWrapper lt(String key, Object value) {
         if (!compared) {
             compared = true;
             Condition condition = new Condition(key, value);
@@ -155,7 +148,7 @@ public class QueryWrapper<T> implements Serializable {
      * @param le  小于等于
      * @return Query
      */
-    public QueryWrapper<T> geAndLe(String key, Object ge, Object le) {
+    public QueryWrapper geAndLe(String key, Object ge, Object le) {
         this.wrappers.add(new Wrapper(Option.GE_AND_LE, key, ge, le));
         return this;
     }
@@ -167,7 +160,7 @@ public class QueryWrapper<T> implements Serializable {
      * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
-    public QueryWrapper<T> like(String key, CharSequence keyword) {
+    public QueryWrapper like(String key, CharSequence keyword) {
         Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -182,7 +175,7 @@ public class QueryWrapper<T> implements Serializable {
      * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
-    public QueryWrapper<T> likeLeft(String key, CharSequence keyword) {
+    public QueryWrapper likeLeft(String key, CharSequence keyword) {
         Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -198,7 +191,7 @@ public class QueryWrapper<T> implements Serializable {
      * @return Query
      */
 
-    public QueryWrapper<T> likeRight(String key, CharSequence keyword) {
+    public QueryWrapper likeRight(String key, CharSequence keyword) {
         Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -211,7 +204,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> orderByAsc(String key) {
+    public QueryWrapper orderByAsc(String key) {
         Condition condition = new Condition(key, null);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -224,7 +217,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> orderByDesc(String key) {
+    public QueryWrapper orderByDesc(String key) {
         Condition condition = new Condition(key, null);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -237,7 +230,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> update(String key, Object value) {
+    public QueryWrapper update(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -251,7 +244,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> unUpdate(String key, Object value) {
+    public QueryWrapper unUpdate(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -265,7 +258,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> search(String value) {
+    public QueryWrapper search(String value) {
         this.setTextSearch(value);
         return this;
     }
@@ -276,7 +269,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> push(String key, Object value) {
+    public QueryWrapper push(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -289,7 +282,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> pull(String key, Object value) {
+    public QueryWrapper pull(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
@@ -303,7 +296,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> or(QueryWrapper<T> wrapper) {
+    public QueryWrapper or(QueryWrapper wrapper) {
         this.wrappers.add(new Wrapper(Option.OR, wrapper));
         return this;
     }
@@ -313,7 +306,7 @@ public class QueryWrapper<T> implements Serializable {
      *
      * @return Query
      */
-    public QueryWrapper<T> inc(String key, Integer number) {
+    public QueryWrapper inc(String key, Integer number) {
         Condition condition = new Condition(key, number);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);

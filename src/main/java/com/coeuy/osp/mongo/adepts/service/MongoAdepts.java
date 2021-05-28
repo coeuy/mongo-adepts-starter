@@ -40,8 +40,8 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> T getOne(QueryWrapper<T> queryWrapper) {
-        return super.getOne(queryWrapper);
+    public <T> T getOne(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.getOne(queryWrapper, entityClass);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> List<T> list(QueryWrapper<T> queryWrapper) {
-        return super.list(queryWrapper);
+    public <T> List<T> list(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.list(queryWrapper, entityClass);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper<T> queryWrapper) {
-        return super.page(pageInfo, queryWrapper);
+    public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.page(pageInfo, queryWrapper, entityClass);
     }
 
     @Override
@@ -90,23 +90,23 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> boolean update(QueryWrapper<T> queryWrapper) {
-        return super.update(queryWrapper);
+    public <T> boolean update(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.update(queryWrapper, entityClass);
     }
 
     @Override
-    public <T> T findAndModify(QueryWrapper<T> queryWrapper) {
-        return super.findAndModify(queryWrapper);
+    public <T> T findAndModify(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.findAndModify(queryWrapper, entityClass);
     }
 
     @Override
-    public <T> boolean updateMulti(QueryWrapper<T> queryWrapper) {
-        return super.updateMulti(queryWrapper);
+    public <T> boolean updateMulti(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.updateMulti(queryWrapper, entityClass);
     }
 
     @Override
-    public <T> boolean delete(QueryWrapper<T> queryWrapper) {
-        return super.delete(queryWrapper);
+    public <T> boolean delete(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.delete(queryWrapper, entityClass);
     }
 
     @Override
@@ -115,8 +115,8 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> int count(QueryWrapper<T> queryWrapper) {
-        return super.count(queryWrapper);
+    public <T> int count(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.count(queryWrapper, entityClass);
     }
 
     @Override
@@ -125,8 +125,8 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> boolean exists(QueryWrapper<T> queryWrapper) {
-        return super.exists(queryWrapper);
+    public <T> boolean exists(QueryWrapper queryWrapper, Class<T> entityClass) {
+        return super.exists(queryWrapper, entityClass);
     }
 
     @Override
@@ -135,12 +135,12 @@ public class MongoAdepts extends AbstractAdepts{
     }
 
     @Override
-    public <T> List<T> group(QueryWrapper<T> queryWrapper, String... keys) {
-        return super.group(queryWrapper, keys);
+    public <T> List<T> group(QueryWrapper queryWrapper, Class<T> entityClass, String... keys) {
+        return super.group(queryWrapper, entityClass, keys);
     }
 
     @Override
-    public <T> PageResult<T> group(PageInfo pageInfo, QueryWrapper<T> queryWrapper, String... keys) {
-        return super.group(pageInfo, queryWrapper, keys);
+    public <T> PageResult<T> group(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass, String... keys) {
+        return super.group(pageInfo, queryWrapper, entityClass, keys);
     }
 }

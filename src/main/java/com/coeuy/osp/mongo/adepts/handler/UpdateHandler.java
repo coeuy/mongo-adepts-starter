@@ -26,7 +26,7 @@ public class UpdateHandler {
     private final MongoAdeptsProperties properties;
     private final WrapperHandler wrapperHandler;
 
-    public Update parse(QueryWrapper<?> queryWrapper) {
+    public Update parse(QueryWrapper queryWrapper) {
         if (wrapperHandler.verifyEqIsBlank(queryWrapper)) {
             log.warn("更新条件没有指定匹配精确条件");
             if (wrapperHandler.verifyConditionIsBlank(queryWrapper)) {

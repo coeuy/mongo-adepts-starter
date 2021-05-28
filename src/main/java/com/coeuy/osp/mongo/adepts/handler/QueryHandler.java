@@ -34,7 +34,7 @@ public class QueryHandler {
 
     private final MongoAdeptsProperties properties;
 
-    public Query parse(QueryWrapper<?> queryWrapper) {
+    public Query parse(QueryWrapper queryWrapper) {
         Query query = new Query();
         Criteria criteria = parseCriteria(queryWrapper);
         if (Objects.nonNull(criteria)) {
@@ -48,7 +48,7 @@ public class QueryHandler {
         return query;
     }
 
-    public Criteria parseCriteria(QueryWrapper<?> queryWrapper) {
+    public Criteria parseCriteria(QueryWrapper queryWrapper) {
         if (properties.isDebug()) {
             log.debug("QueryWrapper：{}",queryWrapper);
         }
@@ -87,7 +87,7 @@ public class QueryHandler {
                             log.debug("集合类型 {}", value);
                         }
                         ArrayList<Object> objects = Lists.newArrayList();
-                        objects.addAll((Collection<?>) value);
+                        objects.addAll((Collection) value);
                         criteria.and(w.getKey()).in(objects);
                     } else {
                         if (properties.isDebug()){

@@ -43,9 +43,9 @@ public class Wrapper implements Serializable {
      */
     private Object var2;
 
-    private QueryWrapper<?> queryWrapper;
+    private QueryWrapper queryWrapper;
 
-    public Wrapper(Option option, QueryWrapper<?> queryWrapper) {
+    public Wrapper(Option option, QueryWrapper queryWrapper) {
         this.option = option;
         this.queryWrapper = queryWrapper;
     }
