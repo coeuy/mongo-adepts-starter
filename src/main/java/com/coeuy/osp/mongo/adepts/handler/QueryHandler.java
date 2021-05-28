@@ -1,10 +1,12 @@
 package com.coeuy.osp.mongo.adepts.handler;
 
+import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.model.query.Option;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -25,11 +27,14 @@ import java.util.Objects;
  */
 
 @Slf4j
+@RequiredArgsConstructor
 public class QueryHandler {
+    
+    public final String X = "*";
 
-    public static final String X = "*";
+    private final MongoAdeptsProperties properties;
 
-    public static Query parse(QueryWrapper<?> queryWrapper) {
+    public Query parse(QueryWrapper<?> queryWrapper) {
         Query query = new Query();
         Criteria criteria = parseCriteria(queryWrapper);
         if (Objects.nonNull(criteria)) {
@@ -43,22 +48,22 @@ public class QueryHandler {
         return query;
     }
 
-    public static Criteria parseCriteria(QueryWrapper<?> queryWrapper) {
-        if (log.isDebugEnabled()) {
-            log.debug(queryWrapper.toString());
+    public Criteria parseCriteria(QueryWrapper<?> queryWrapper) {
+        if (properties.isDebug()) {
+            log.debug("QueryWrapper：{}",queryWrapper);
         }
         List<Wrapper> wrappers = queryWrapper.getWrappers();
         List<Criteria> criteria = forEachValue(wrappers);
         return addCriteria(Objects.isNull(criteria) ? null : criteria);
     }
 
-    public static List<Criteria> forEachValue(List<Wrapper> wrappers) {
+    public List<Criteria> forEachValue(List<Wrapper> wrappers) {
         List<Criteria> criteriaSet = Lists.newArrayList();
         wrappers.forEach(wrapper -> criteriaSet.add(caseKeyValue(wrapper)));
         return CollectionUtils.isNotEmpty(criteriaSet) ? criteriaSet : null;
     }
 
-    private static Criteria caseKeyValue(Wrapper wrapper) {
+    private Criteria caseKeyValue(Wrapper wrapper) {
         Criteria criteria = new Criteria();
         switch (wrapper.getOption()) {
             case OR:
@@ -78,18 +83,24 @@ public class QueryHandler {
                     Object value = w.getValue();
                     log.debug(value.getClass().toString());
                     if (value instanceof Collection) {
-                        log.debug("集合类型 {}", value);
+                        if (properties.isDebug()){
+                            log.debug("集合类型 {}", value);
+                        }
                         ArrayList<Object> objects = Lists.newArrayList();
                         objects.addAll((Collection<?>) value);
                         criteria.and(w.getKey()).in(objects);
                     } else {
-                        log.debug("普通类型 {}", value);
+                        if (properties.isDebug()){
+                            log.debug("普通类型 {}", value);
+                        }
                         criteria.and(w.getKey()).in(value);
                     }
                 });
                 break;
             case GE_AND_LE:
-                log.debug("范围取值 {}", wrapper);
+                if (properties.isDebug()){
+                    log.debug("范围取值 {}", wrapper);
+                }
                 criteria.andOperator(Criteria.where(wrapper.getKey()).gte(wrapper.getVar1()),
                         Criteria.where(wrapper.getKey()).lte(wrapper.getVar2()));
                 break;
@@ -142,7 +153,7 @@ public class QueryHandler {
         return criteria;
     }
 
-    public static Criteria addCriteria(List<Criteria> criteriaList) {
+    public Criteria addCriteria(List<Criteria> criteriaList) {
         if (Objects.isNull(criteriaList)) {
             return null;
         }

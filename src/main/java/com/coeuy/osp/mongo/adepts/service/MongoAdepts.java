@@ -1,37 +1,20 @@
 package com.coeuy.osp.mongo.adepts.service;
 
+import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.handler.QueryHandler;
 import com.coeuy.osp.mongo.adepts.handler.UpdateHandler;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
-import com.coeuy.osp.mongo.adepts.model.page.PageQuery;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
-import com.google.common.collect.Lists;
-import com.mongodb.client.result.DeleteResult;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.mapping.context.MappingContext;
-import org.springframework.data.mongodb.MongoCollectionUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Mongo Adepts
@@ -40,194 +23,124 @@ import java.util.Objects;
  * @date 2020/6/16 10:09
  */
 @Slf4j
-@Service
-@RequiredArgsConstructor
-public class MongoAdepts {
-    private final static String MONGO_ID = "_id";
+public class MongoAdepts extends AbstractAdepts{
 
-    protected final MongoTemplate mongoTemplate;
+    public MongoAdepts(MongoTemplate mongoTemplate, QueryHandler queryHandler, UpdateHandler updateHandler, MongoAdeptsProperties properties, MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context) {
+        super(mongoTemplate, queryHandler, updateHandler, properties, context);
+    }
 
-    private final @NonNull MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context;
-
+    @Override
     public String getCollectionName(Class<?> entityClass) {
-        return this.determineCollectionName(entityClass);
+        return super.getCollectionName(entityClass);
     }
 
-    public String determineCollectionName(@Nullable Class<?> entityClass) {
-
-        if (entityClass == null) {
-            throw new InvalidDataAccessApiUsageException(
-                    "No class parameter provided, entity collection can't be determined!");
-        }
-
-        return context.getRequiredPersistentEntity(entityClass).getCollection();
+    @Override
+    public String determineCollectionName(Class<?> entityClass) {
+        return super.determineCollectionName(entityClass);
     }
+
+    @Override
     public <T> T getOne(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.findOne(QueryHandler.parse(queryWrapper), entityClass, collectionName);
+        return super.getOne(queryWrapper);
     }
 
+    @Override
     public <T> T getById(Serializable id, Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.findById(id, entityClass, collectionName);
+        return super.getById(id, entityClass);
     }
 
+    @Override
     public <T> List<T> list(Class<T> entityClass) {
-        return mongoTemplate.findAll(entityClass);
+        return super.list(entityClass);
     }
 
+    @Override
     public <T> List<T> list(QueryWrapper<T> queryWrapper) {
-        return mongoTemplate.find(QueryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
+        return super.list(queryWrapper);
     }
 
+    @Override
     public <T> List<T> listByIds(Collection<? extends Serializable> idList, Class<T> entityClass) {
-        Iterable<T> allByIds = mongoTemplate.find(Query.query(Criteria.where(MONGO_ID).in(idList)), entityClass);
-        return Lists.newArrayList(allByIds);
+        return super.listByIds(idList, entityClass);
     }
 
+    @Override
     public <T> PageResult<T> page(PageInfo pageInfo, Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        PageQuery page = PageQuery.page(pageInfo);
-        List<T> list = mongoTemplate.find(new Query().with(page), entityClass, collectionName);
-        long total = mongoTemplate.count(new Query(), entityClass, collectionName);
-        return new PageResult<>(list, total, page);
+        return super.page(pageInfo, entityClass);
     }
 
+    @Override
     public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Query query = QueryHandler.parse(queryWrapper);
-        log.debug("");
-        if (queryWrapper.getTextSearch() != null) {
-            query.addCriteria(TextCriteria.forDefaultLanguage().matching(queryWrapper.getTextSearch()));
-        }
-        log.debug("");
-        long total = mongoTemplate.count(query, entityClass, collectionName);
-        PageQuery page = PageQuery.page(pageInfo);
-        List<T> list = mongoTemplate.find(query.with(page), entityClass, collectionName);
-        return new PageResult<>(list, total, page);
+        return super.page(pageInfo, queryWrapper);
     }
 
+    @Override
     public <T> T insert(T entity) {
-        return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
+        return super.insert(entity);
     }
 
+    @Override
     public <T> boolean insertBatch(Collection<T> entityList, Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Collection<T> ts = mongoTemplate.insertAll(entityList);
-        return ts.size() == entityList.size();
+        return super.insertBatch(entityList, entityClass);
     }
 
+    @Override
     public <T> T save(T entity) {
-        return mongoTemplate.save(entity);
+        return super.save(entity);
     }
 
-
+    @Override
     public <T> boolean update(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Update update = UpdateHandler.parse(queryWrapper);
-        if (Objects.isNull(update)) {
-            log.warn("更新操作不执行");
-            return true;
-        }
-        return mongoTemplate.updateFirst(QueryHandler.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
+        return super.update(queryWrapper);
     }
 
+    @Override
     public <T> T findAndModify(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-
-        Update update = UpdateHandler.parse(queryWrapper);
-        if (Objects.isNull(update)) {
-            return null;
-        }
-        return mongoTemplate.findAndModify(QueryHandler.parse(queryWrapper), update, entityClass, collectionName);
+        return super.findAndModify(queryWrapper);
     }
 
-
+    @Override
     public <T> boolean updateMulti(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Update update = UpdateHandler.parse(queryWrapper);
-        if (Objects.isNull(update)) {
-            return true;
-        }
-        return mongoTemplate.updateMulti(QueryHandler.parse(queryWrapper), update, entityClass, collectionName).wasAcknowledged();
+        return super.updateMulti(queryWrapper);
     }
 
-
+    @Override
     public <T> boolean delete(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-
-        final Query parse = QueryHandler.parse(queryWrapper);
-        log.info("删除数据操作监听:\n - {}", parse);
-        DeleteResult remove = mongoTemplate.remove(parse, entityClass, collectionName);
-        return remove.wasAcknowledged();
+        return super.delete(queryWrapper);
     }
 
+    @Override
     public <T> boolean delete(T t, Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        DeleteResult remove = mongoTemplate.remove(t, collectionName);
-        return remove.wasAcknowledged();
+        return super.delete(t, entityClass);
     }
 
-
+    @Override
     public <T> int count(QueryWrapper<T> queryWrapper) {
-        return (int) mongoTemplate.count(QueryHandler.parse(queryWrapper), queryWrapper.getEntityClass());
+        return super.count(queryWrapper);
     }
 
+    @Override
     public <T> boolean deleteAll(Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        if (mongoTemplate.collectionExists(entityClass)) {
-            DeleteResult remove = mongoTemplate.remove(entityClass, collectionName);
-            return remove.wasAcknowledged();
-        }
-        return true;
+        return super.deleteAll(entityClass);
     }
 
+    @Override
     public <T> boolean exists(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.exists(QueryHandler.parse(queryWrapper), entityClass, collectionName);
+        return super.exists(queryWrapper);
     }
 
+    @Override
     public <T> boolean exists(Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.collectionExists(collectionName) || mongoTemplate.collectionExists(entityClass);
+        return super.exists(entityClass);
     }
 
+    @Override
     public <T> List<T> group(QueryWrapper<T> queryWrapper, String... keys) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Criteria criteria = QueryHandler.parseCriteria(queryWrapper);
-        TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
-                entityClass,
-                Aggregation.match(criteria),
-                Aggregation.group(keys)
-
-        );
-        return mongoTemplate.aggregate(aggregation, collectionName, entityClass).getMappedResults();
+        return super.group(queryWrapper, keys);
     }
 
+    @Override
     public <T> PageResult<T> group(PageInfo pageInfo, QueryWrapper<T> queryWrapper, String... keys) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        PageQuery page = PageQuery.page(pageInfo);
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        Criteria criteria = QueryHandler.parseCriteria(queryWrapper);
-        TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
-                entityClass,
-                Aggregation.match(criteria),
-                Aggregation.group(keys),
-                Aggregation.skip((long) (page.getPageNumber() - 1) * page.getPageSize()),
-                Aggregation.limit(page.getPageSize())
-        );
-        AggregationResults<T> aggregate = mongoTemplate.aggregate(aggregation, entityClass);
-        long count = mongoTemplate.count(Query.query(criteria), entityClass, collectionName);
-        return PageResult.page(aggregate.getMappedResults(), count, page.getPageNumber(), page.getPageSize(), page.getOffset());
+        return super.group(pageInfo, queryWrapper, keys);
     }
-
-
 }

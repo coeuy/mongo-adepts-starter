@@ -41,9 +41,10 @@ public class PageInfo implements Serializable {
 
     /**
      * 分页默认根据ObjectId排序
+     *
      * @param current 当前页
-     * @param size 页个数
-     * @return
+     * @param size    页个数
+     * @return PageInfo
      */
     public static PageInfo page(Integer current, Integer size) {
         return new PageInfo(current, size, PageSort.orderByDesc("_id"));
@@ -65,7 +66,7 @@ public class PageInfo implements Serializable {
      * @param current 当前页
      * @param size 页个数
      * @param key 排序字段
-     * @return
+     * @return PageInfo
      */
     public static PageInfo pageAscForKey(Integer current, Integer size, String key) {
         return new PageInfo(current, size, PageSort.orderByAsc(key));

@@ -1,13 +1,13 @@
 package com.coeuy.osp.mongo.adepts.handler;
 
-import com.coeuy.osp.mongo.adepts.config.MongoAdeptsConfiguration;
+import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.exception.MongoAdeptsException;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Update;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,19 +20,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2020/6/18 10:43
  */
 @Slf4j
+@RequiredArgsConstructor
 public class UpdateHandler {
 
-    private static MongoAdeptsConfiguration mongoPlusConfiguration;
+    private final MongoAdeptsProperties properties;
+    private final WrapperHandler wrapperHandler;
 
-    @Resource
-    public static void setMongoPlusConfiguration(MongoAdeptsConfiguration mongoPlusConfiguration) {
-        UpdateHandler.mongoPlusConfiguration = mongoPlusConfiguration;
-    }
-
-    public static Update parse(QueryWrapper<?> queryWrapper) {
-        if (WrapperHandler.verifyEqIsBlank(queryWrapper)) {
+    public Update parse(QueryWrapper<?> queryWrapper) {
+        if (wrapperHandler.verifyEqIsBlank(queryWrapper)) {
             log.warn("更新条件没有指定匹配精确条件");
-            if (WrapperHandler.verifyConditionIsBlank(queryWrapper)) {
+            if (wrapperHandler.verifyConditionIsBlank(queryWrapper)) {
                 log.warn("更新条件没有指定任何匹配条件");
                 throw new MongoAdeptsException("更新条件没有指定任何匹配条件");
             }

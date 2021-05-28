@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties\
   com.coeuy.osp.mongo.adepts.config.MongoAdeptsConfiguration
