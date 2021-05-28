@@ -34,6 +34,7 @@ public class MongoAdeptsProperties {
                 "'    ' `-' '  `-`-`| `-'   '       ``-'`-`--'|`-' `-'`--'\n" +
                 "                ._.'                         |           \n" +
                 "                                             '           \n" +
-                "\n version: 1.0.0-SNAPSHOT");
+                "                Version: 1.0.0-SNAPSHOT                  \n"
+        );
     }
 }
