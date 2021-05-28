@@ -1,12 +1,11 @@
 package com.coeuy.osp.mongo.adepts.service;
 
-import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
-import com.coeuy.osp.mongo.adepts.utils.ReflectionKit;
-import com.coeuy.osp.mongo.adepts.utils.UpdateParseUtils;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageQuery;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
+import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.utils.CriteriaParseUtils;
+import com.coeuy.osp.mongo.adepts.utils.UpdateParseUtils;
 import com.google.common.collect.Lists;
 import com.mongodb.client.result.DeleteResult;
 import lombok.NonNull;
@@ -29,7 +28,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +61,16 @@ public class MongoAdepts {
         }
 
         return context.getRequiredPersistentEntity(entityClass).getCollection();
+    }
+    public <T> T getOne(QueryWrapper<T> queryWrapper) {
+        Class<T> entityClass = queryWrapper.getEntityClass();
+        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
+        return mongoTemplate.findOne(CriteriaParseUtils.parse(queryWrapper), entityClass, collectionName);
+    }
+
+    public <T> T getById(Serializable id, Class<T> entityClass) {
+        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
+        return mongoTemplate.findById(id, entityClass, collectionName);
     }
 
     public <T> List<T> list(Class<T> entityClass) {
@@ -101,19 +109,8 @@ public class MongoAdepts {
         return new PageResult<>(list, total, page);
     }
 
-    public <T> T getOne(QueryWrapper<T> queryWrapper) {
-        Class<T> entityClass = queryWrapper.getEntityClass();
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.findOne(CriteriaParseUtils.parse(queryWrapper), entityClass, collectionName);
-    }
-
-    public <T> T getById(Serializable id, Class<T> entityClass) {
-        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
-        return mongoTemplate.findById(id, entityClass, collectionName);
-    }
-
-    public <T> T insert(T t) {
-        return mongoTemplate.insert(t, getCollectionName(ClassUtils.getUserClass(t)));
+    public <T> T insert(T entity) {
+        return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
     }
 
     public <T> boolean insertBatch(Collection<T> entityList, Class<T> entityClass) {
@@ -122,8 +119,8 @@ public class MongoAdepts {
         return ts.size() == entityList.size();
     }
 
-    public <T> T save(T t) {
-        return mongoTemplate.save(t);
+    public <T> T save(T entity) {
+        return mongoTemplate.save(entity);
     }
 
 
@@ -182,7 +179,7 @@ public class MongoAdepts {
         return (int) mongoTemplate.count(CriteriaParseUtils.parse(queryWrapper), queryWrapper.getEntityClass());
     }
 
-    public <T> boolean removeAll(Class<T> entityClass) {
+    public <T> boolean deleteAll(Class<T> entityClass) {
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         if (mongoTemplate.collectionExists(entityClass)) {
             DeleteResult remove = mongoTemplate.remove(entityClass, collectionName);
@@ -197,7 +194,7 @@ public class MongoAdepts {
         return mongoTemplate.exists(CriteriaParseUtils.parse(queryWrapper), entityClass, collectionName);
     }
 
-    public <T> boolean collectionExists(Class<T> entityClass) {
+    public <T> boolean exists(Class<T> entityClass) {
         String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
         return mongoTemplate.collectionExists(collectionName) || mongoTemplate.collectionExists(entityClass);
     }

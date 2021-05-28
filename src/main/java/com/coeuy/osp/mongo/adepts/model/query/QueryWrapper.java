@@ -1,5 +1,6 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
+import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -146,14 +147,27 @@ public class QueryWrapper<T> implements Serializable {
     }
 
     /**
+     * 范围查询（整型或者时间）
+     *
+     * @param key 字段
+     * @param ge  大于等于
+     * @param le  小于等于
+     * @return Query
+     */
+    public QueryWrapper<T> geAndLe(String key, Object ge, Object le) {
+        this.wrappers.add(new Wrapper(Option.GE_AND_LE, key, ge, le));
+        return this;
+    }
+
+    /**
      * 模糊匹配(全部)
      *
      * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param value 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
-    public QueryWrapper<T> like(String key, Object value) {
-        Condition condition = new Condition(key, value);
+    public QueryWrapper<T> like(String key, CharSequence keyword) {
+        Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
         this.wrappers.add(new Wrapper(Option.LIKE, conditions));
@@ -164,11 +178,11 @@ public class QueryWrapper<T> implements Serializable {
      * 模糊匹配（左边）
      *
      * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param value 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
-    public QueryWrapper<T> likeLeft(String key, Object value) {
-        Condition condition = new Condition(key, value);
+    public QueryWrapper<T> likeLeft(String key, CharSequence keyword) {
+        Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
         this.wrappers.add(new Wrapper(Option.LIKE_LEFT, conditions));
@@ -179,11 +193,12 @@ public class QueryWrapper<T> implements Serializable {
      * 模糊匹配（右边）
      *
      * @param key   注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param value 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
+     * @param  keyword 注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
      * @return Query
      */
-    public QueryWrapper<T> likeRight(String key, Object value) {
-        Condition condition = new Condition(key, value);
+
+    public QueryWrapper<T> likeRight(String key, CharSequence keyword) {
+        Condition condition = new Condition(key, keyword);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
         this.wrappers.add(new Wrapper(Option.LIKE_RIGHT, conditions));
@@ -229,18 +244,7 @@ public class QueryWrapper<T> implements Serializable {
         return this;
     }
 
-    /**
-     * 范围查询（整型或者时间）
-     *
-     * @param key 字段
-     * @param ge  大于等于
-     * @param le  小于等于
-     * @return Query
-     */
-    public QueryWrapper<T> geAndLe(String key, Object ge, Object le) {
-        this.wrappers.add(new Wrapper(Option.GE_AND_LE, key, ge, le));
-        return this;
-    }
+
 
 
     /**
@@ -269,11 +273,24 @@ public class QueryWrapper<T> implements Serializable {
 
 
     /**
-     * 追加集合
+     * 追加子文档
      *
      * @return Query
      */
     public QueryWrapper<T> push(String key, Object value) {
+        Condition condition = new Condition(key, value);
+        List<Condition> conditions = new ArrayList<>();
+        conditions.add(condition);
+        this.wrappers.add(new Wrapper(Option.PUSH, conditions));
+        return this;
+    }
+
+    /**
+     * 删除子文档
+     *
+     * @return Query
+     */
+    public QueryWrapper<T> pull(String key, Object value) {
         Condition condition = new Condition(key, value);
         List<Condition> conditions = new ArrayList<>();
         conditions.add(condition);
