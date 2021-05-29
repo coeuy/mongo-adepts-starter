@@ -30,11 +30,39 @@
 #### 2. Springboot - application.yml
 
 ```yaml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test-db
 mongo-adepts:
   debug: true
 ```
 
 #### 3. 代码中使用
+
+以集合`User`为例子
+
+```java
+/**
+ * 用户集合 
+ * 初次使用JavaMongo提示：
+ * 加@Document即表示该类为文档类，集合名默认使用该Class的SimpleName，即"User"
+ */
+@Data
+@Document
+public class User {
+
+    /**
+     * 这里的@Id表示该属性为集合ObjectId 文档唯一键
+     */
+    @Id
+    private String userId;
+
+    private String username;
+
+    private String password;
+}
+```
 
 - 方式1 ：获取Bean调用(需要传 Class<?>)
 
