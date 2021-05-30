@@ -22,7 +22,7 @@
 
 <dependency>
     <groupId>com.coeuy</groupId>
-    <artifactId>mongo-adepts</artifactId>
+    <artifactId>mongo-adepts-starter</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
