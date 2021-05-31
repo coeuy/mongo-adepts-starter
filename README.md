@@ -17,24 +17,34 @@
 ### 快速使用
 
 #### 1. 添加maven依赖
-
+说明：如果只添加了`mongo-adepts-starter`依赖默认是静态模式，不会自动连接mongodb；
+这个是考虑到模块化开发时`mongo-adepts`可能只做一个model依赖模块，会导致不需要连接mongodb的服务会自动连接，所以才设置其不自动连接。
 ```xml
-
+<!--mongo-adepts-->
 <dependency>
     <groupId>com.coeuy</groupId>
     <artifactId>mongo-adepts-starter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.3</version>
+</dependency>
+<!--mongo data-->
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-mongodb</artifactId>
 </dependency>
 ```
 
 #### 2. Springboot - application.yml
 
 ```yaml
+# 原生 spring mongo data 配置
 spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/test-db
+      
+# mongo-adepts 配置
 mongo-adepts:
+  # debug模式
   debug: true
 ```
 
