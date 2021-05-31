@@ -58,7 +58,7 @@ public abstract class AbstractAdepts {
     private final @NonNull
     MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context;
 
-    private MongoTemplate template() {
+    public MongoTemplate template() {
         return this.mongoTemplate;
     }
 

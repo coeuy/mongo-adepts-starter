@@ -4,17 +4,18 @@ import com.coeuy.osp.mongo.adepts.handler.QueryHandler;
 import com.coeuy.osp.mongo.adepts.handler.UpdateHandler;
 import com.coeuy.osp.mongo.adepts.handler.WrapperHandler;
 import com.coeuy.osp.mongo.adepts.service.MongoAdepts;
-import com.mongodb.lang.NonNull;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
+
+import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * <p>
@@ -26,22 +27,28 @@ import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
  */
 @Data
 @Slf4j
-@Configuration
-@RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class MongoAdeptsConfiguration {
 
-    private final MongoTemplate mongoTemplate;
+    @Autowired(required = false)
+    private  MongoTemplate mongoTemplate;
 
-    private final MongoAdeptsProperties properties;
+    @Autowired(required = false)
+    private  MongoAdeptsProperties properties;
 
-    private final @NonNull
+    @Autowired(required = false)
+    private
     MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context;
 
+
     @Bean
-    @Primary
     public MongoAdepts mongoAdepts() {
         if (properties.isDebug()) {
             log.info("Init bean MongoAdepts···");
+        }
+        if (Objects.isNull(mongoTemplate)||Objects.isNull(context)){
+            log.info("No mongo data dependency in your project,The mongo adepts just start of static mode now. ");
+            return null;
         }
         return new MongoAdepts(
                 mongoTemplate,

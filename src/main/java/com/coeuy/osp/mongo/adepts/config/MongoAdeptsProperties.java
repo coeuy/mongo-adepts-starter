@@ -25,6 +25,8 @@ public class MongoAdeptsProperties {
      */
     private boolean debug;
 
+    private boolean enable = true;
+
 
     public MongoAdeptsProperties() {
         System.out.println(".    .                         .       .          .      \n" +
@@ -33,8 +35,7 @@ public class MongoAdeptsProperties {
                 "|    |(   )|  |(   |(   )   /     \\(   |(.-' |   )|  `--.\n" +
                 "'    ' `-' '  `-`-`| `-'   '       ``-'`-`--'|`-' `-'`--'\n" +
                 "                ._.'                         |           \n" +
-                "                                             '           \n" +
-                "                Version: 1.0.0-SNAPSHOT                  \n"
+                "                                             '           \n"
         );
     }
 }
