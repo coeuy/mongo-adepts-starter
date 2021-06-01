@@ -12,7 +12,7 @@
 
 ## 官方文档
 
-更多说明阅读[MongoAdepts文档首页](https://www.coeuy.com/mongo-adepts)
+更多说明阅读[MongoAdepts文档首页](https://www.coeuy.com/osp/mongo-adepts)
 
 ### 快速使用
 
