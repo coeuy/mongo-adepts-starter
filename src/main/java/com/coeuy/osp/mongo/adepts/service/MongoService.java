@@ -7,6 +7,7 @@ import com.coeuy.osp.mongo.adepts.utils.ReflectionKit;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -19,11 +20,11 @@ import java.util.List;
  * @date 2020/6/16 10:09
  */
 @Slf4j
-@RequiredArgsConstructor
 public class MongoService<T> {
     protected Class<T> entityClass = currentModelClass();
 
-    protected final MongoAdepts mongoAdepts;
+    @Autowired(required = false)
+    protected  MongoAdepts mongoAdepts;
 
     @SuppressWarnings("unchecked")
     protected Class<T> currentModelClass() {
