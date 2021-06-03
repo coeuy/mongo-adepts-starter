@@ -23,6 +23,7 @@ public final class ReflectionKit {
             return Object.class;
         }
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        log.info("types: {}",params);
         if (index >= params.length || index < 0) {
             log.warn(String.format("警告: Index: %s, Size of %s's Parameterized Type: %s .", index,
                     clazz.getSimpleName(), params.length));

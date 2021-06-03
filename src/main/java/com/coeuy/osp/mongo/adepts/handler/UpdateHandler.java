@@ -2,7 +2,7 @@ package com.coeuy.osp.mongo.adepts.handler;
 
 import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.exception.MongoAdeptsException;
-import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
+import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +26,16 @@ public class UpdateHandler {
     private final MongoAdeptsProperties properties;
     private final WrapperHandler wrapperHandler;
 
-    public Update parse(QueryWrapper queryWrapper) {
-        if (wrapperHandler.verifyEqIsBlank(queryWrapper)) {
+    public Update parse(QueryAdepts queryAdepts) {
+        if (wrapperHandler.verifyEqIsBlank(queryAdepts)) {
             log.warn("更新条件没有指定匹配精确条件");
-            if (wrapperHandler.verifyConditionIsBlank(queryWrapper)) {
+            if (wrapperHandler.verifyConditionIsBlank(queryAdepts)) {
                 log.warn("更新条件没有指定任何匹配条件");
                 throw new MongoAdeptsException("更新条件没有指定任何匹配条件");
             }
         }
-        log.info("更新数据监听:{}", queryWrapper.toString());
-        List<Wrapper> wrappers = queryWrapper.getWrappers();
+        log.info("更新数据监听:{}", queryAdepts.toString());
+        List<Wrapper> wrappers = queryAdepts.getWrappers();
         Update update = new Update();
         AtomicInteger updateSize = new AtomicInteger();
         for (Wrapper wrapper : wrappers) {

@@ -1,7 +1,7 @@
 package com.coeuy.osp.mongo.adepts.handler;
 
+import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.Option;
-import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,15 +24,15 @@ public class WrapperHandler {
     /**
      * 判断条件中是否有 eq 条件
      *
-     * @param queryWrapper queryWrapper
+     * @param queryAdepts queryAdepts
      * @return boolean
      */
-    public boolean verifyEqNoBlank(QueryWrapper queryWrapper) {
-        return verifyOptionNoBlank(queryWrapper, EQ);
+    public boolean verifyEqNoBlank(QueryAdepts queryAdepts) {
+        return verifyOptionNoBlank(queryAdepts, EQ);
     }
 
-    private boolean verifyOptionNoBlank(QueryWrapper queryWrapper, Option... options) {
-        List<Wrapper> wrappers = queryWrapper.getWrappers();
+    private boolean verifyOptionNoBlank(QueryAdepts queryAdepts, Option... options) {
+        List<Wrapper> wrappers = queryAdepts.getWrappers();
         if (CollectionUtils.isEmpty(wrappers)) {
             return false;
         }
@@ -53,26 +53,26 @@ public class WrapperHandler {
     /**
      * 判断匹配条件是否为空
      *
-     * @param queryWrapper queryWrapper
+     * @param queryAdepts queryAdepts
      * @return boolean
      */
-    public boolean verifyConditionNoBlank(QueryWrapper queryWrapper) {
-        return verifyOptionNoBlank(queryWrapper, EQ, LIKE, LIKE_LEFT, LIKE_RIGHT, NE, GE, GE_AND_LE, LE, IN, NOT_IN);
+    public boolean verifyConditionNoBlank(QueryAdepts queryAdepts) {
+        return verifyOptionNoBlank(queryAdepts, EQ, LIKE, LIKE_LEFT, LIKE_RIGHT, NE, GE, GE_AND_LE, LE, IN, NOT_IN);
     }
 
-    public boolean verifyConditionIsBlank(QueryWrapper queryWrapper) {
-        return !verifyConditionNoBlank(queryWrapper);
+    public boolean verifyConditionIsBlank(QueryAdepts queryAdepts) {
+        return !verifyConditionNoBlank(queryAdepts);
     }
 
-    public boolean verifyNeNoBlank(QueryWrapper queryWrapper) {
-        return verifyOptionNoBlank(queryWrapper, NE);
+    public boolean verifyNeNoBlank(QueryAdepts queryAdepts) {
+        return verifyOptionNoBlank(queryAdepts, NE);
     }
 
-    public boolean verifyInNoBlank(QueryWrapper queryWrapper) {
-        return verifyOptionNoBlank(queryWrapper, IN);
+    public boolean verifyInNoBlank(QueryAdepts queryAdepts) {
+        return verifyOptionNoBlank(queryAdepts, IN);
     }
 
-    public boolean verifyEqIsBlank(QueryWrapper queryWrapper) {
-        return !verifyEqNoBlank(queryWrapper);
+    public boolean verifyEqIsBlank(QueryAdepts queryAdepts) {
+        return !verifyEqNoBlank(queryAdepts);
     }
 }

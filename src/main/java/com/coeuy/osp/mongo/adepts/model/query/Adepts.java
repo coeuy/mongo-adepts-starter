@@ -11,8 +11,8 @@ import lombok.Data;
  * @date 2020/7/23 9:45
  */
 @Data
-public class Wrappers {
-    public static QueryWrapper query() {
-        return new QueryWrapper();
+public class Adepts {
+    public static  QueryAdepts query() {
+        return new QueryAdepts();
     }
 }

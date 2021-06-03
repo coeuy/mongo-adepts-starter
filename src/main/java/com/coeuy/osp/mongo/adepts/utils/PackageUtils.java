@@ -1,6 +1,7 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
 import com.google.common.collect.Sets;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +77,7 @@ public class PackageUtils implements ResourceLoaderAware {
     }
 
     @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
+    public void setResourceLoader(@NonNull ResourceLoader resourceLoader) {
         this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
         this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
     }

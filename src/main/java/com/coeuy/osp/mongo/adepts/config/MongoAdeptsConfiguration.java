@@ -30,16 +30,15 @@ import java.util.Objects;
 @Configuration(proxyBeanMethods = false)
 public class MongoAdeptsConfiguration {
 
+    @SuppressWarnings("all")
     @Autowired(required = false)
     private  MongoTemplate mongoTemplate;
-
+    @SuppressWarnings("all")
     @Autowired(required = false)
     private  MongoAdeptsProperties properties;
-
+    @SuppressWarnings("all")
     @Autowired(required = false)
-    private
-    MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context;
-
+    private MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> context;
 
     @Bean
     public MongoAdepts mongoAdepts() {

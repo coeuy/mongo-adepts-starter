@@ -2,10 +2,9 @@ package com.coeuy.osp.mongo.adepts.service;
 
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
-import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
+import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.utils.ReflectionKit;
 import com.google.common.collect.Lists;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,16 +22,17 @@ import java.util.List;
 public class MongoService<T> {
     protected Class<T> entityClass = currentModelClass();
 
+    @SuppressWarnings("all")
     @Autowired(required = false)
     protected  MongoAdepts mongoAdepts;
 
     @SuppressWarnings("unchecked")
     protected Class<T> currentModelClass() {
-        return (Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1);
+        return (Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 0);
     }
 
-    public T getOne(QueryWrapper queryWrapper) {
-        return mongoAdepts.getOne(queryWrapper, entityClass);
+    public T getOne(QueryAdepts queryAdepts) {
+        return mongoAdepts.getOne(queryAdepts, entityClass);
     }
 
     public T getById(Serializable id) {
@@ -43,8 +43,8 @@ public class MongoService<T> {
         return mongoAdepts.list(entityClass);
     }
 
-    public List<T> list(QueryWrapper queryWrapper) {
-        return mongoAdepts.list(queryWrapper, entityClass);
+    public List<T> list(QueryAdepts queryAdepts) {
+        return mongoAdepts.list(queryAdepts, entityClass);
     }
 
     public List<T> listByIds(Collection<? extends Serializable> idList) {
@@ -56,8 +56,8 @@ public class MongoService<T> {
         return mongoAdepts.page(pageInfo, entityClass);
     }
 
-    public PageResult<T> page(PageInfo pageInfo, QueryWrapper queryWrapper) {
-        return mongoAdepts.page(pageInfo, queryWrapper, entityClass);
+    public PageResult<T> page(PageInfo pageInfo, QueryAdepts queryAdepts) {
+        return mongoAdepts.page(pageInfo, queryAdepts, entityClass);
     }
 
 
@@ -73,48 +73,48 @@ public class MongoService<T> {
         return mongoAdepts.save(t);
     }
 
-    public boolean update(QueryWrapper queryWrapper) {
-        return mongoAdepts.update(queryWrapper, entityClass);
+    public boolean update(QueryAdepts queryAdepts) {
+        return mongoAdepts.update(queryAdepts, entityClass);
     }
 
-    public T findAndModify(QueryWrapper queryWrapper) {
-        return mongoAdepts.findAndModify(queryWrapper, entityClass);
+    public T findAndModify(QueryAdepts queryAdepts) {
+        return mongoAdepts.findAndModify(queryAdepts, entityClass);
     }
 
-    public boolean updateMulti(QueryWrapper queryWrapper) {
-        return mongoAdepts.updateMulti(queryWrapper, entityClass);
+    public boolean updateMulti(QueryAdepts queryAdepts) {
+        return mongoAdepts.updateMulti(queryAdepts, entityClass);
     }
 
-    public boolean delete(QueryWrapper queryWrapper) {
-        return mongoAdepts.delete(queryWrapper, entityClass);
+    public boolean delete(QueryAdepts queryAdepts) {
+        return mongoAdepts.delete(queryAdepts, entityClass);
     }
 
     public boolean delete(T t) {
         return mongoAdepts.delete(t, entityClass);
     }
 
-    public int count(QueryWrapper queryWrapper) {
-        return mongoAdepts.count(queryWrapper, entityClass);
+    public int count(QueryAdepts queryAdepts) {
+        return mongoAdepts.count(queryAdepts, entityClass);
     }
 
     public boolean removeAll() {
         return mongoAdepts.deleteAll(entityClass);
     }
 
-    public boolean exists(QueryWrapper queryWrapper) {
-        return mongoAdepts.exists(queryWrapper, entityClass);
+    public boolean exists(QueryAdepts queryAdepts) {
+        return mongoAdepts.exists(queryAdepts, entityClass);
     }
 
     public boolean collectionExists() {
         return mongoAdepts.exists(entityClass);
     }
 
-    public List<T> group(QueryWrapper queryWrapper, String... keys) {
-        return mongoAdepts.group(queryWrapper, entityClass, keys);
+    public List<T> group(QueryAdepts queryAdepts, String... keys) {
+        return mongoAdepts.group(queryAdepts, entityClass, keys);
     }
 
-    public PageResult<T> group(PageInfo pageInfo, QueryWrapper queryWrapper, String... keys) {
-        return mongoAdepts.group(pageInfo, queryWrapper, entityClass, keys);
+    public PageResult<T> group(PageInfo pageInfo, QueryAdepts queryAdepts, String... keys) {
+        return mongoAdepts.group(pageInfo, queryAdepts, entityClass, keys);
     }
 
 

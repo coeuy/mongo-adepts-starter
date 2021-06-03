@@ -2,7 +2,7 @@ package com.coeuy.osp.mongo.adepts.handler;
 
 import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.model.query.Option;
-import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
+import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import com.google.common.collect.Lists;
@@ -34,13 +34,13 @@ public class QueryHandler {
 
     private final MongoAdeptsProperties properties;
 
-    public Query parse(QueryWrapper queryWrapper) {
+    public Query parse(QueryAdepts queryAdepts) {
         Query query = new Query();
-        Criteria criteria = parseCriteria(queryWrapper);
+        Criteria criteria = parseCriteria(queryAdepts);
         if (Objects.nonNull(criteria)) {
             query.addCriteria(criteria);
         }
-        queryWrapper.getWrappers().forEach(q -> {
+        queryAdepts.getWrappers().forEach(q -> {
             if (q.getOption() == Option.ORDER_BY_ASC) {
                 q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.ASC, w.getKey())));
             }
@@ -48,11 +48,11 @@ public class QueryHandler {
         return query;
     }
 
-    public Criteria parseCriteria(QueryWrapper queryWrapper) {
+    public Criteria parseCriteria(QueryAdepts queryAdepts) {
         if (properties.isDebug()) {
-            log.debug("QueryWrapper：{}",queryWrapper);
+            log.debug("QueryWrapper：{}",queryAdepts);
         }
-        List<Wrapper> wrappers = queryWrapper.getWrappers();
+        List<Wrapper> wrappers = queryAdepts.getWrappers();
         List<Criteria> criteria = forEachValue(wrappers);
         return addCriteria(Objects.isNull(criteria) ? null : criteria);
     }
@@ -68,7 +68,7 @@ public class QueryHandler {
         switch (wrapper.getOption()) {
             case OR:
                 List<Criteria> criteriaSet = new ArrayList<>();
-                List<Wrapper> orWrappers = wrapper.getQueryWrapper().getWrappers();
+                List<Wrapper> orWrappers = wrapper.getQueryAdepts().getWrappers();
                 if (CollectionUtils.isNotEmpty(orWrappers)) {
                     orWrappers.forEach(or -> criteriaSet.add(caseKeyValue(or)));
                     Criteria[] cs = criteriaSet.toArray(new Criteria[0]);
@@ -87,7 +87,7 @@ public class QueryHandler {
                             log.debug("集合类型 {}", value);
                         }
                         ArrayList<Object> objects = Lists.newArrayList();
-                        objects.addAll((Collection) value);
+                        objects.addAll((Collection<?>) value);
                         criteria.and(w.getKey()).in(objects);
                     } else {
                         if (properties.isDebug()){

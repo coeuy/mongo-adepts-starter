@@ -24,7 +24,7 @@
 <dependency>
     <groupId>com.coeuy</groupId>
     <artifactId>mongo-adepts-starter</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>
 <!--mongo data-->
 <dependency>
@@ -77,6 +77,7 @@ public class User {
 - 方式1 ：获取Bean调用(需要传 Class<?>)
 
 ```java
+import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 
@@ -88,8 +89,8 @@ public class UserService {
     private MongoAdepts mongoAdepts;
 
     public void getOne() {
-        QueryWrapper wrapper = new QueryWrapper().eq("username", "Superman");
-        User user = mongoAdepts.getOne(wrapper,User.class);
+        QueryAdepts queryAdepts = new QueryAdepts().eq("username", "Superman");
+        User user = mongoAdepts.getOne(queryAdepts, User.class);
         System.out.println(user);
     }
 
@@ -125,11 +126,11 @@ public class UserService extends MongoService<User> {
 
 1. getById(id,entityClass) 根据文档ObjectId查询单个文档
 
-2. getOne(queryWrapper) 根据构造器条件查询文档单条记录
+2. getOne(queryAdepts) 根据构造器条件查询文档单条记录
 
 3. list(entityClass) 查询指定集合全部文档
 
-4. list(queryWrapper) 根据构造器条件查询多个文档
+4. list(queryAdepts) 根据构造器条件查询多个文档
 
 5. listByIds(idList,entityClass) 根据文档多个ObjectId查询多个文档
 
@@ -139,23 +140,23 @@ public class UserService extends MongoService<User> {
 
 8. save(entity) 保存单条文档（注意：⚠️这里会保存为null的属性）
 
-9. update(queryWrapper) 根据条件构造器更新单个文档
+9. update(queryAdepts) 根据条件构造器更新单个文档
 
-10. updateMulti(queryWrapper) 根据条件构造器更新多个文档MONGO_ID
+10. updateMulti(queryAdepts) 根据条件构造器更新多个文档MONGO_ID
 
-11. delete(queryWrapper) 根据条件删除文档(注意：⚠️这里会删除满足条件的所有文档而不是删除单个文档)
+11. delete(queryAdepts) 根据条件删除文档(注意：⚠️这里会删除满足条件的所有文档而不是删除单个文档)
 
 12. deleteAll(entityClass) 删除集合所有文档
 
-13. count(queryWrapper) 根据条件构造器查询集合文档数量
+13. count(queryAdepts) 根据条件构造器查询集合文档数量
 
-14. exists(queryWrapper) 根据条件构造器查询文档是否存在
+14. exists(queryAdepts) 根据条件构造器查询文档是否存在
 
 15. exists(entityClass) 查询集合是否存在
 
 16. page(pageInfo,entityClass) 无条件分页查询
 
-17. page(pageInfo,queryWrapper) 根据条件构造器分页查询
+17. page(pageInfo,queryAdepts) 根据条件构造器分页查询
 
 ### 调用 mongoTemplate
 
@@ -165,7 +166,7 @@ public class UserService extends MongoService<User> {
 ```
 
 
-### QueryWrapper条件构造器
+### QueryAdepts 条件构造器
 
 1. `eq(String key, Object value)` 等于
 
@@ -226,7 +227,7 @@ public class UserService extends MongoService<User> {
 
 ### 参考例子
 
-#### [mongo-adepts-springboot-example](#)
+#### [mongo-adepts-springboot-example](https://github.com/yarnk/mongo-adepts-springboot-example)
 
 
 
