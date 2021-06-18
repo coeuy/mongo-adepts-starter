@@ -70,6 +70,17 @@ public class PageResult<T> implements Serializable {
             this.pages = (int) (total / (long) pageable.getPageSize()) + 1;
         }
     }
+    public PageResult(List<T> records, long total,long size,long current) {
+        this.records = records;
+        this.total = total;
+        this.current = current;
+        this.size = Math.min(size, total);
+        if (total % size == 0) {
+            this.pages = (int) (total / size);
+        } else {
+            this.pages = (int) (total / size) + 1;
+        }
+    }
 
     public PageResult(long current, long size, long total) {
         this.records = Collections.emptyList();
