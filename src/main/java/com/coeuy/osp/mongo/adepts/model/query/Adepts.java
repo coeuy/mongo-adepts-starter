@@ -12,6 +12,7 @@ import lombok.Data;
  */
 @Data
 public class Adepts {
+
     public static  QueryAdepts query() {
         return new QueryAdepts();
     }
