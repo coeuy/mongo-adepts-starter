@@ -12,7 +12,6 @@ import lombok.Data;
  */
 @Data
 public class Adepts {
-
     public static  LambdaQueryAdepts lambdaQuery() {
         return new LambdaQueryAdepts();
     }
