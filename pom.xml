@@ -64,7 +64,7 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
+    <!--发布到公开仓库-->
 <!--    <distributionManagement>-->
 <!--        <snapshotRepository>-->
 <!--            <id>ossrh</id>-->
@@ -75,16 +75,18 @@
 <!--            <url>https://s01.oss.sonatype.org/content/repositories/releases</url>-->
 <!--        </repository>-->
 <!--    </distributionManagement>-->
-<!--    <distributionManagement>-->
-<!--        <snapshotRepository>-->
-<!--            <id>github-snapshot</id>-->
-<!--            <name>mongo-adepts-starter</name>-->
-<!--            <url>https://maven.pkg.github.com/coeuy/mongo-adepts-starter/</url>-->
-<!--            <uniqueVersion>true</uniqueVersion>-->
-<!--        </snapshotRepository>-->
-<!--        <repository>-->
-<!--            <id>github-release</id>-->
-<!--            <name>mongo-adepts-starter</name>-->
+
+<!--    //github-->
+    <!--    <distributionManagement>-->
+    <!--        <snapshotRepository>-->
+    <!--            <id>github-snapshot</id>-->
+    <!--            <name>mongo-adepts-starter</name>-->
+    <!--            <url>https://maven.pkg.github.com/coeuy/mongo-adepts-starter/</url>-->
+    <!--            <uniqueVersion>true</uniqueVersion>-->
+    <!--        </snapshotRepository>-->
+    <!--        <repository>-->
+    <!--            <id>github-release</id>-->
+    <!--            <name>mongo-adepts-starter</name>-->
 <!--            <url>https://maven.pkg.github.com/coeuy/mongo-adepts-starter/</url>-->
 <!--            <uniqueVersion>false</uniqueVersion>-->
 <!--        </repository>-->

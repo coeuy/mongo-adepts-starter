@@ -119,6 +119,55 @@ public class StringUtils {
         return Pattern.matches(regex, input);
     }
 
+    public static boolean equals(CharSequence str1, CharSequence str2) {
+        return equals(str1, str2, false);
+    }
+
+    /**
+     * 比较两个字符串（大小写不敏感）。
+     *
+     * <pre>
+     * equalsIgnoreCase(null, null)   = true
+     * equalsIgnoreCase(null, &quot;abc&quot;)  = false
+     * equalsIgnoreCase(&quot;abc&quot;, null)  = false
+     * equalsIgnoreCase(&quot;abc&quot;, &quot;abc&quot;) = true
+     * equalsIgnoreCase(&quot;abc&quot;, &quot;ABC&quot;) = true
+     * </pre>
+     *
+     * @param str1 要比较的字符串1
+     * @param str2 要比较的字符串2
+     * @return 如果两个字符串相同，或者都是{@code null}，则返回{@code true}
+     */
+    public static boolean equalsIgnoreCase(CharSequence str1, CharSequence str2) {
+        return equals(str1, str2, true);
+    }
+
+    /**
+     * 比较两个字符串是否相等。
+     *
+     * @param str1       要比较的字符串1
+     * @param str2       要比较的字符串2
+     * @param ignoreCase 是否忽略大小写
+     * @return 如果两个字符串相同，或者都是{@code null}，则返回{@code true}
+     * @since 3.2.0
+     */
+    public static boolean equals(CharSequence str1, CharSequence str2, boolean ignoreCase) {
+        if (null == str1) {
+            // 只有两个都为null才判断相等
+            return str2 == null;
+        }
+        if (null == str2) {
+            // 字符串2空，字符串1非空，直接false
+            return false;
+        }
+
+        if (ignoreCase) {
+            return str1.toString().equalsIgnoreCase(str2.toString());
+        } else {
+            return str1.toString().contentEquals(str2);
+        }
+    }
+
     /**
      * 拼接字符串第二个字符串第一个字母大写
      */
@@ -209,4 +258,68 @@ public class StringUtils {
         return propertyCls != null && (boolean.class.isAssignableFrom(propertyCls) || Boolean.class.isAssignableFrom(propertyCls));
     }
 
+    public static String lowerFirst(CharSequence str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() > 0) {
+            char firstChar = str.charAt(0);
+            if (Character.isUpperCase(firstChar)) {
+                return Character.toLowerCase(firstChar) + subSuf(str, 1);
+            }
+        }
+        return str.toString();
+    }
+
+    public static String subSuf(CharSequence string, int fromIndex) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        return sub(string, fromIndex, string.length());
+    }
+
+    public static boolean isEmpty(CharSequence str) {
+        return str == null || str.length() == 0;
+    }
+
+    public static String str(CharSequence cs) {
+        return null == cs ? null : cs.toString();
+    }
+
+    public static String sub(CharSequence str, int fromIndexInclude, int toIndexExclude) {
+        if (isEmpty(str)) {
+            return str(str);
+        }
+        int len = str.length();
+
+        if (fromIndexInclude < 0) {
+            fromIndexInclude = len + fromIndexInclude;
+            if (fromIndexInclude < 0) {
+                fromIndexInclude = 0;
+            }
+        } else if (fromIndexInclude > len) {
+            fromIndexInclude = len;
+        }
+
+        if (toIndexExclude < 0) {
+            toIndexExclude = len + toIndexExclude;
+            if (toIndexExclude < 0) {
+                toIndexExclude = len;
+            }
+        } else if (toIndexExclude > len) {
+            toIndexExclude = len;
+        }
+
+        if (toIndexExclude < fromIndexInclude) {
+            int tmp = fromIndexInclude;
+            fromIndexInclude = toIndexExclude;
+            toIndexExclude = tmp;
+        }
+
+        if (fromIndexInclude == toIndexExclude) {
+            return EMPTY;
+        }
+
+        return str.toString().substring(fromIndexInclude, toIndexExclude);
+    }
 }
