@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Pageable;
 
-import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * <p>
@@ -24,14 +26,13 @@ public class PageResult<T> implements Serializable {
     private static final long serialVersionUID = -862700531381496278L;
     private List<T> records;
 
-    @Min(1)
-    private long size;
-    @Min(1)
-    private long current;
+    protected long size;
 
-    private long total;
+    protected long current;
 
-    private long pages;
+    protected long total;
+
+    protected long pages;
 
     public PageResult() {
         this.records = Collections.emptyList();
@@ -97,5 +98,16 @@ public class PageResult<T> implements Serializable {
 
     public static <T> PageResult<T> page(List<T> records, long total, long page, long size, long current) {
         return new PageResult<>(records, total, page, size, current);
+    }
+
+    public PageResult<T> setRecords(List<T> records) {
+        this.records = records;
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <R> PageResult<R> convert(Function<? super T, ? extends R> mapper) {
+        List<R> collect = this.getRecords().stream().map(mapper).collect(toList());
+        return ((PageResult<R>) this).setRecords(collect);
     }
 }
