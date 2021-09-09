@@ -2,7 +2,7 @@
 
 ![](./doc/mongo-adepts-logo.png)
 
-这是一个基于MongoTemplate的封装强化starter组件
+>这是一个基于MongoTemplate的封装强化starter组件
 
 # 特性
 
@@ -17,14 +17,14 @@
 ### 快速使用
 
 #### 1. 添加maven依赖
-说明：如果只添加了`mongo-adepts-starter`依赖默认是静态模式，不会自动连接mongodb；
+>说明：如果只添加了`mongo-adepts-starter`依赖默认是静态模式，不会自动连接mongodb；
 这个是考虑到模块化开发时`mongo-adepts`可能只做一个model依赖模块，会导致不需要连接mongodb的服务会自动连接，所以才设置其不自动连接。
 ```xml
 <!--mongo-adepts-->
 <dependency>
     <groupId>com.coeuy</groupId>
     <artifactId>mongo-adepts-starter</artifactId>
-    <version>1.0.5</version>
+    <version>version</version>
 </dependency>
 <!--mongo data-->
 <dependency>
@@ -77,8 +77,11 @@ public class User {
 - 方式1 ：获取Bean调用(需要传 Class<?>)
 
 ```java
+import com.coeuy.osp.mongo.adepts.model.query.Adepts;
+import com.coeuy.osp.mongo.adepts.model.query.LambdaQueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,9 +91,21 @@ public class UserService {
     @Resource
     private MongoAdepts mongoAdepts;
 
+    /**
+     * new QueryAdepts 传入 字段
+     */
     public void getOne() {
         QueryAdepts queryAdepts = new QueryAdepts().eq("username", "Superman");
         User user = mongoAdepts.getOne(queryAdepts, User.class);
+        System.out.println(user);
+    }
+
+    /**
+     * 支持Lambada
+     */
+    public void getOneLambada() {
+        LambdaQueryAdepts<User> lambdaQueryAdepts = Adepts.<User>lambdaQuery().eq(User::getUsername, "Superman");
+        User user = mongoAdepts.getOne(lambdaQueryAdepts, User.class);
         System.out.println(user);
     }
 
@@ -102,6 +117,8 @@ public class UserService {
     }
 }
 ```
+
+####
 
 - 方式2：继承`MongoService`
 
