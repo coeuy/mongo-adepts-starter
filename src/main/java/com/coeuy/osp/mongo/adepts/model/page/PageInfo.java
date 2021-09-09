@@ -3,7 +3,6 @@ package com.coeuy.osp.mongo.adepts.model.page;
 import lombok.Data;
 import org.springframework.data.domain.Sort;
 
-import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -18,16 +17,14 @@ import java.io.Serializable;
 @Data
 public class PageInfo implements Serializable {
     private static final long serialVersionUID = -3289929523969018074L;
-    @Min(1)
     private Integer current;
-    @Min(1)
     private Integer size;
 
     private PageSort pageSort;
 
     private Sort sort;
 
-    public PageInfo(@Min(1) Integer current, @Min(1) Integer size, PageSort pageSort) {
+    public PageInfo(Integer current, Integer size, PageSort pageSort) {
         this.current = current;
         this.size = size;
         this.pageSort = pageSort;
