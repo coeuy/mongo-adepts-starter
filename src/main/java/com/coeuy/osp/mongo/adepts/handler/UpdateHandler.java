@@ -26,16 +26,16 @@ public class UpdateHandler {
     private final MongoAdeptsProperties properties;
     private final WrapperHandler wrapperHandler;
 
-    public Update parse(QueryWrapper AbstractAdepts) {
-        if (wrapperHandler.verifyEqIsBlank(AbstractAdepts)) {
+    public Update parse(QueryWrapper queryWrapper) {
+        if (wrapperHandler.verifyEqIsBlank(queryWrapper)) {
             log.warn("更新条件没有指定匹配精确条件");
-            if (wrapperHandler.verifyConditionIsBlank(AbstractAdepts)) {
+            if (wrapperHandler.verifyConditionIsBlank(queryWrapper)) {
                 log.warn("更新条件没有指定任何匹配条件");
                 throw new MongoAdeptsException("更新条件没有指定任何匹配条件");
             }
         }
-        log.info("更新数据监听:{}", AbstractAdepts.toString());
-        List<Wrapper> wrappers = AbstractAdepts.getWrappers();
+        log.info("更新数据监听:{}", queryWrapper.toString());
+        List<Wrapper> wrappers = queryWrapper.getWrappers();
         Update update = new Update();
         AtomicInteger updateSize = new AtomicInteger();
         for (Wrapper wrapper : wrappers) {

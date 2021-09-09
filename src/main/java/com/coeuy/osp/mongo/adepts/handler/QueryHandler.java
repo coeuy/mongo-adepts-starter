@@ -34,13 +34,13 @@ public class QueryHandler {
 
     private final MongoAdeptsProperties properties;
 
-    public Query parse(QueryWrapper abstractAdepts) {
+    public Query parse(QueryWrapper queryWrapper) {
         Query query = new Query();
-        Criteria criteria = parseCriteria(abstractAdepts);
+        Criteria criteria = parseCriteria(queryWrapper);
         if (Objects.nonNull(criteria)) {
             query.addCriteria(criteria);
         }
-        abstractAdepts.getWrappers().forEach(q -> {
+        queryWrapper.getWrappers().forEach(q -> {
             if (q.getOption() == Option.ORDER_BY_ASC) {
                 q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.ASC, w.getKey())));
             }
@@ -50,7 +50,7 @@ public class QueryHandler {
 
     public Criteria parseCriteria(QueryWrapper abstractAdepts) {
         if (properties.isDebug()) {
-            log.debug("\nAdepts wrapper monitor：{}",abstractAdepts);
+            log.info("\nAdepts wrapper monitor：{}",abstractAdepts);
         }
         List<Wrapper> wrappers = abstractAdepts.getWrappers();
         List<Criteria> criteria = forEachValue(wrappers);
