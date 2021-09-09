@@ -1,5 +1,7 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
+import com.coeuy.osp.mongo.adepts.config.Func0;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;

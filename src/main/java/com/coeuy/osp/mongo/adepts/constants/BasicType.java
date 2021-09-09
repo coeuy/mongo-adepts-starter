@@ -1,4 +1,4 @@
-package com.coeuy.osp.mongo.adepts.utils;
+package com.coeuy.osp.mongo.adepts.constants;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

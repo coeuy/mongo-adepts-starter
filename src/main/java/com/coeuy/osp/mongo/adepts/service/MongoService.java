@@ -3,7 +3,6 @@ package com.coeuy.osp.mongo.adepts.service;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
-import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
 import com.coeuy.osp.mongo.adepts.utils.ReflectionKit;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ public class MongoService<T> {
 
     @SuppressWarnings("all")
     @Autowired(required = false)
-    protected  MongoAdepts mongoAdepts;
+    protected MongoAdepts mongoAdepts;
 
     @SuppressWarnings("unchecked")
     protected Class<T> currentModelClass() {

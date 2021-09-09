@@ -1,6 +1,7 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
-import com.coeuy.osp.mongo.adepts.utils.FieldGetter;
+import com.coeuy.osp.mongo.adepts.constants.Option;
+import com.coeuy.osp.mongo.adepts.config.FieldGetter;
 import com.coeuy.osp.mongo.adepts.utils.FieldUtils;
 
 import java.io.Serializable;

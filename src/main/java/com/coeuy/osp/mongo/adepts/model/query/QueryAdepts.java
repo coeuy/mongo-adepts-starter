@@ -1,5 +1,6 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
+import com.coeuy.osp.mongo.adepts.constants.Option;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

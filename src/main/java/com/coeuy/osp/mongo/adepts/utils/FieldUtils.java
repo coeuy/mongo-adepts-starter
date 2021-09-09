@@ -1,7 +1,8 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
+import com.coeuy.osp.mongo.adepts.config.FieldGetter;
+
 import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

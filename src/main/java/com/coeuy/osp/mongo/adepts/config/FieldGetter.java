@@ -1,4 +1,4 @@
-package com.coeuy.osp.mongo.adepts.utils;
+package com.coeuy.osp.mongo.adepts.config;
 
 import com.mongodb.Function;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * Explain
+ * 字段获取序列化对象
  * </p>
  *
  * @author yarnk

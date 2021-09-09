@@ -1,7 +1,7 @@
 package com.coeuy.osp.mongo.adepts.handler;
 
 import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
-import com.coeuy.osp.mongo.adepts.model.query.Option;
+import com.coeuy.osp.mongo.adepts.constants.Option;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;

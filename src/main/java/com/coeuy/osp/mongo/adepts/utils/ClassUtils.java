@@ -1,5 +1,7 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
+import com.coeuy.osp.mongo.adepts.constants.BasicType;
+
 /**
  * <p>
  * Explain

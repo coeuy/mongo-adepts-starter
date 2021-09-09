@@ -1,4 +1,4 @@
-package com.coeuy.osp.mongo.adepts.model.query;
+package com.coeuy.osp.mongo.adepts.constants;
 
 import java.io.Serializable;
 

@@ -1,14 +1,14 @@
 package com.coeuy.osp.mongo.adepts.handler;
 
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
-import com.coeuy.osp.mongo.adepts.model.query.Option;
+import com.coeuy.osp.mongo.adepts.constants.Option;
 import com.coeuy.osp.mongo.adepts.model.query.Wrapper;
 import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static com.coeuy.osp.mongo.adepts.model.query.Option.*;
+import static com.coeuy.osp.mongo.adepts.constants.Option.*;
 
 
 /**

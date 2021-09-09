@@ -1,9 +1,6 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
-import com.coeuy.osp.mongo.adepts.service.MongoService;
 import lombok.Data;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
