@@ -121,7 +121,13 @@ public abstract class AbstractAdepts {
         return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
     }
 
+    @Deprecated
     public <T> boolean insertBatch(Collection<T> entityList, Class<T> entityClass) {
+        Collection<T> ts = mongoTemplate.insertAll(entityList);
+        return ts.size() == entityList.size();
+    }
+
+    public <T> boolean insertBatch(Collection<T> entityList) {
         Collection<T> ts = mongoTemplate.insertAll(entityList);
         return ts.size() == entityList.size();
     }
