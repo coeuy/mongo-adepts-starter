@@ -1,12 +1,12 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
-import com.coeuy.osp.mongo.adepts.constants.Option;
 import com.coeuy.osp.mongo.adepts.config.FieldGetter;
-import com.coeuy.osp.mongo.adepts.utils.FieldUtils;
+import com.coeuy.osp.mongo.adepts.constants.Option;
+import com.coeuy.osp.mongo.adepts.utils.LambdaUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -18,265 +18,140 @@ import java.util.List;
  */
 public class LambdaQueryAdepts<T>  extends QueryWrapper implements Query<FieldGetter<T, ?>>, Serializable {
 
+    public LambdaQueryAdepts() {
+        this((T) null);
+    }
 
-    /**
-     * 等于
-     *
-     * @return Query
-     */
+    public LambdaQueryAdepts(T entity) {
+        this.entity = entity;
+    }
+
+    @Getter
+    @Setter
+    private T entity;
+
+    public LambdaQueryAdepts(Class<T> entityClass) {
+        setEntityClass(entityClass);
+    }
+
     @Override
     public LambdaQueryAdepts<T> eq(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.EQ, conditions));
+        this.wrappers.add(buildEq(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
 
-
-    /**
-     * 不等于（单个比较）
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> ne(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.NE, conditions));
+        this.wrappers.add(buildNe(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
-    /**
-     * 多匹配（单个比较）
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> in(FieldGetter<T, ?> column, Object value) {
         if (!compared) {
-            String fieldName = FieldUtils.getFieldName(column);
             compared = true;
-            Condition condition = new Condition(fieldName, value);
-            List<Condition> conditions = new ArrayList<>();
-            conditions.add(condition);
-            this.wrappers.add(new Wrapper(Option.IN, conditions));
+            this.wrappers.add(buildIn(LambdaUtils.getFieldName(column), value));
         }
         return this;
     }
 
-    /**
-     * 大于等于（单个比较）
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> ge(FieldGetter<T, ?> column, Object value) {
         if (!compared) {
-            String fieldName = FieldUtils.getFieldName(column);
             compared = true;
-            Condition condition = new Condition(fieldName, value);
-            List<Condition> conditions = new ArrayList<>();
-            conditions.add(condition);
-            this.wrappers.add(new Wrapper(Option.GE, conditions));
+            this.wrappers.add(buildGe(LambdaUtils.getFieldName(column), value));
         }
         return this;
     }
 
-    /**
-     * 大于（单个比较）
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> gt(FieldGetter<T, ?> column, Object value) {
         if (!compared) {
-            String fieldName = FieldUtils.getFieldName(column);
             compared = true;
-            Condition condition = new Condition(fieldName, value);
-            List<Condition> conditions = new ArrayList<>();
-            conditions.add(condition);
-            this.wrappers.add(new Wrapper(Option.GT, conditions));
+            this.wrappers.add(buildGt(LambdaUtils.getFieldName(column), value));
         }
         return this;
     }
 
 
-    /**
-     * 小于等于（单个比较）
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> le(FieldGetter<T, ?> column, Object value) {
         if (!compared) {
-            String fieldName = FieldUtils.getFieldName(column);
             compared = true;
-            Condition condition = new Condition(fieldName, value);
-            List<Condition> conditions = new ArrayList<>();
-            conditions.add(condition);
-            this.wrappers.add(new Wrapper(Option.LE, conditions));
+            this.wrappers.add(buildLe(LambdaUtils.getFieldName(column), value));
         }
         return this;
     }
 
-    /**
-     * 小于（单个比较）
-     *
-     * @param column 注意不能使用多个比较值
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> lt(FieldGetter<T, ?> column, Object value) {
         if (!compared) {
-            String fieldName = FieldUtils.getFieldName(column);
             compared = true;
-            Condition condition = new Condition(fieldName, value);
-            List<Condition> conditions = new ArrayList<>();
-            conditions.add(condition);
-            this.wrappers.add(new Wrapper(Option.LT, conditions));
+            this.wrappers.add(buildLt(LambdaUtils.getFieldName(column), value));
         }
         return this;
     }
 
-    /**
-     * 范围查询（整型或者时间）
-     *
-     * @param column 字段
-     * @param ge  大于等于
-     * @param le  小于等于
-     * @return Query
-     */
     @Override
-    public LambdaQueryAdepts<T> geAndLe(FieldGetter<T, ?> column, Object ge, Object le) {
-        String fieldName = FieldUtils.getFieldName(column);
-        this.wrappers.add(new Wrapper(Option.GE_AND_LE, fieldName, ge, le));
+    public LambdaQueryAdepts<T> scope(FieldGetter<T, ?> column, Object ge, Object le) {
+        this.wrappers.add(buildScope(LambdaUtils.getFieldName(column), ge, le));
         return this;
     }
 
-    /**
-     * 模糊匹配(全部)
-     *
-     * @param column     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param keyword    注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> like(FieldGetter<T, ?> column, CharSequence keyword) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, keyword);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.LIKE, conditions));
+        this.wrappers.add(buildLike(LambdaUtils.getFieldName(column), keyword));
         return this;
     }
 
-    /**
-     * 模糊匹配（左边）
-     *
-     * @param column     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param keyword    注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> likeLeft(FieldGetter<T, ?> column, CharSequence keyword) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, keyword);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.LIKE_LEFT, conditions));
+        this.wrappers.add(buildLikeLeft(LambdaUtils.getFieldName(column), keyword));
         return this;
     }
 
-    /**
-     * 模糊匹配（右边）
-     *
-     * @param column     注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @param keyword    注意！模糊匹配只能匹配字符串类型，整型无法模糊查询
-     * @return Query
-     */
 
     @Override
     public LambdaQueryAdepts<T> likeRight(FieldGetter<T, ?> column, CharSequence keyword) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, keyword);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.LIKE_RIGHT, conditions));
+        this.wrappers.add(buildLikeRight(LambdaUtils.getFieldName(column), keyword));
         return this;
     }
 
-    /**
-     * 升序排序
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> orderByAsc(FieldGetter<T, ?> column) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, null);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.ORDER_BY_ASC, conditions));
+        this.wrappers.add(buildOrderAsc(LambdaUtils.getFieldName(column)));
         return this;
     }
 
-    /**
-     * 降序排序
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> orderByDesc(FieldGetter<T, ?> column) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, null);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.ORDER_BY_DESC, conditions));
+        this.wrappers.add(buildOrderDesc(LambdaUtils.getFieldName(column)));
         return this;
     }
 
-    /**
-     * 更新某个值
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> update(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.UPDATE, conditions));
+        this.wrappers.add(buildUpdate(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
 
-    /**
-     * 指定某个字段为空
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> unUpdate(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.UN_UPDATE, conditions));
+        this.wrappers.add(buildUnUpdate(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
-
-    /**
-     * 索引搜索
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> search(String value) {
         this.setTextSearch(value);
@@ -284,56 +159,28 @@ public class LambdaQueryAdepts<T>  extends QueryWrapper implements Query<FieldGe
     }
 
 
-    /**
-     * 追加子文档
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> push(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.PUSH, conditions));
+        this.wrappers.add(buildPush(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
-    /**
-     * 删除子文档
-     *
-     * @return Query
-     */
+
     @Override
     public LambdaQueryAdepts<T> pull(FieldGetter<T, ?> column, Object value) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, value);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.PUSH, conditions));
+        this.wrappers.add(buildPull(LambdaUtils.getFieldName(column), value));
         return this;
     }
 
-    @Override
-    public QueryWrapper or(QueryWrapper wrapper) {
+    public LambdaQueryAdepts<T> or(LambdaQueryAdepts<T> wrapper) {
         this.wrappers.add(new Wrapper(Option.OR, wrapper));
         return this;
     }
 
 
-
-    /**
-     * 字段加减法
-     *
-     * @return Query
-     */
     @Override
     public LambdaQueryAdepts<T> inc(FieldGetter<T, ?> column, Integer number) {
-        String fieldName = FieldUtils.getFieldName(column);
-        Condition condition = new Condition(fieldName, number);
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition);
-        this.wrappers.add(new Wrapper(Option.UN_UPDATE, conditions));
+        this.wrappers.add(buildInc(LambdaUtils.getFieldName(column), number));
         return this;
     }
 }

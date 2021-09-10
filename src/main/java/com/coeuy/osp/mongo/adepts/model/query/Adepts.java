@@ -16,5 +16,4 @@ public class Adepts {
     public static  <T> LambdaQueryAdepts <T> lambdaQuery() {
         return new LambdaQueryAdepts<>();
     }
-
 }

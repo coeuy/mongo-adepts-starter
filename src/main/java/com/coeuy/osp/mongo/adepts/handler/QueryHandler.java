@@ -87,7 +87,7 @@ public class QueryHandler {
                             log.debug("集合类型 {}", value);
                         }
                         ArrayList<Object> objects = Lists.newArrayList();
-                        objects.addAll((Collection<?>) value);
+                        objects.addAll((Collection) value);
                         criteria.and(w.getKey()).in(objects);
                     } else {
                         if (properties.isDebug()){
@@ -97,7 +97,7 @@ public class QueryHandler {
                     }
                 });
                 break;
-            case GE_AND_LE:
+            case SCOPE:
                 if (properties.isDebug()){
                     log.debug("范围取值 {}", wrapper);
                 }

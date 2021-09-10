@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @author yarnk
  * @date 2021/9/9
  */
+@SuppressWarnings("all")
 @FunctionalInterface
 public interface FieldGetter<T, R> extends Function<T, R>, Serializable {
 }

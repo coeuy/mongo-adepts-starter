@@ -117,7 +117,7 @@ public final class ReflectionKit {
     }
 
     public static Method[] getMethodsDirectly(Class<?> beanClass, boolean withSuperClassMethods) throws SecurityException {
-        Assert.notNull(beanClass);
+        Assert.notNull(beanClass,"Params beanClass not be null!");
 
         Method[] allMethods = null;
         Class<?> searchType = beanClass;

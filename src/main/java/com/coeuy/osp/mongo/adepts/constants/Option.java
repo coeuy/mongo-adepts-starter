@@ -33,7 +33,7 @@ public enum Option implements Serializable {
     PUSH,
     PULL,
     GROUP_BY,
-    GE_AND_LE,
+    SCOPE,
     LIKE;
 
     Option() {

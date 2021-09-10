@@ -28,13 +28,19 @@ public class UpdateHandler {
 
     public Update parse(QueryWrapper queryWrapper) {
         if (wrapperHandler.verifyEqIsBlank(queryWrapper)) {
-            log.warn("更新条件没有指定匹配精确条件");
+            if (properties.isDebug()){
+                log.warn("更新条件没有指定匹配精确条件");
+            }
             if (wrapperHandler.verifyConditionIsBlank(queryWrapper)) {
-                log.warn("更新条件没有指定任何匹配条件");
+                if (properties.isDebug()){
+                    log.warn("更新条件没有指定任何匹配条件");
+                }
                 throw new MongoAdeptsException("更新条件没有指定任何匹配条件");
             }
         }
-        log.info("更新数据监听:{}", queryWrapper.toString());
+        if (properties.isDebug()){
+            log.info("更新数据监听:{}", queryWrapper.toString());
+        }
         List<Wrapper> wrappers = queryWrapper.getWrappers();
         Update update = new Update();
         AtomicInteger updateSize = new AtomicInteger();
@@ -69,7 +75,9 @@ public class UpdateHandler {
         }
 
         if (updateSize.get() == 0) {
-            log.warn("没有任何更新的值");
+            if (properties.isDebug()){
+                log.warn("没有任何更新的值");
+            }
             return null;
         }
         return update;
