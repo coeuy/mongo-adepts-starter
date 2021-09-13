@@ -44,11 +44,11 @@ public class Wrapper implements Serializable {
      */
     private Object var2;
 
-    private QueryWrapper abstractAdepts;
+    private QueryWrapper queryWrapper;
 
     public Wrapper(Option option, QueryWrapper abstractAdepts) {
         this.option = option;
-        this.abstractAdepts = abstractAdepts;
+        this.queryWrapper = abstractAdepts;
     }
 
     public Wrapper(Option option, List<Condition> conditions) {

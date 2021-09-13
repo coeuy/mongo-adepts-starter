@@ -165,5 +165,5 @@ public interface Query<R> extends Serializable {
      *
      * @return Query
      */
-    QueryWrapper inc(R column, Integer number);
+    QueryWrapper inc(R column, Long number);
 }

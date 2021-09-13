@@ -179,7 +179,7 @@ public class LambdaQueryAdepts<T>  extends QueryWrapper implements Query<FieldGe
 
 
     @Override
-    public LambdaQueryAdepts<T> inc(FieldGetter<T, ?> column, Integer number) {
+    public LambdaQueryAdepts<T> inc(FieldGetter<T, ?> column, Long number) {
         this.wrappers.add(buildInc(LambdaUtils.getFieldName(column), number));
         return this;
     }

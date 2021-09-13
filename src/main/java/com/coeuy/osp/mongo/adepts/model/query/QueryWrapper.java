@@ -1,12 +1,14 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
 import com.coeuy.osp.mongo.adepts.constants.Option;
+import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -37,6 +39,34 @@ public class QueryWrapper extends WrapperBuilder implements Serializable {
     protected String textSearch;
 
     private Class<?> entityClass;
+
+    public String getSrt(Class<?> entityClass,String fn){
+        StringBuilder str = new StringBuilder();
+        if (StringUtils.isNotBlank(fn)){
+            str.append("\n\n操作[");
+            str.append(fn).append("]");
+        }
+        if (entityClass!=null){
+            str.append("\n集合[");
+            str.append(entityClass.getSimpleName()).append("]").append("\n条件:\n");
+        }
+        if (!this.wrappers.isEmpty()){
+            int i = 1;
+            for (Wrapper wrapper : wrappers) {
+                StringBuilder s1 = new StringBuilder(i + ".(");
+                String cnName = wrapper.getOption().getCnName();
+                for (Condition condition : wrapper.getConditions()) {
+                    s1.append(condition.getKey()).append(" ").append(cnName).append(" ").append(condition.getValue()).append(")\n");
+                }
+                if (Objects.nonNull(wrapper.getQueryWrapper())){
+                    s1.append(wrapper.getQueryWrapper().getSrt(null,null));
+                }
+                str.append(s1);
+                i++;
+            }
+        }
+        return str.toString();
+    }
 
 
     public QueryWrapper eq(String key, Object value) {
@@ -166,7 +196,7 @@ public class QueryWrapper extends WrapperBuilder implements Serializable {
     }
 
 
-    public QueryWrapper inc(String key, Integer number) {
+    public QueryWrapper inc(String key, Long number) {
         this.wrappers.add(buildInc(key,number));
         return this;
     }

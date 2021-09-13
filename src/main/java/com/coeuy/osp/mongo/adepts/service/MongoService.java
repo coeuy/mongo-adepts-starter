@@ -66,7 +66,7 @@ public class MongoService<T> {
     }
 
     public boolean insertBatch(Collection<T> entityList) {
-        return mongoAdepts.insertBatch(entityList, entityClass);
+        return mongoAdepts.insertBatch(entityList);
     }
 
     public T save(T t) {

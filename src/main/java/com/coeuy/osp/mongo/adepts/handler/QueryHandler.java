@@ -43,16 +43,16 @@ public class QueryHandler {
         queryWrapper.getWrappers().forEach(q -> {
             if (q.getOption() == Option.ORDER_BY_ASC) {
                 q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.ASC, w.getKey())));
+            }else if (q.getOption() == Option.ORDER_BY_DESC) {
+                q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.DESC, w.getKey())));
             }
         });
         return query;
     }
 
-    public Criteria parseCriteria(QueryWrapper abstractAdepts) {
-        if (properties.isDebug()) {
-            log.info("\nAdepts wrapper monitor：{}",abstractAdepts);
-        }
-        List<Wrapper> wrappers = abstractAdepts.getWrappers();
+    public Criteria parseCriteria(QueryWrapper queryWrapper) {
+
+        List<Wrapper> wrappers = queryWrapper.getWrappers();
         List<Criteria> criteria = forEachValue(wrappers);
         return addCriteria(Objects.isNull(criteria) ? null : criteria);
     }
@@ -68,7 +68,7 @@ public class QueryHandler {
         switch (wrapper.getOption()) {
             case OR:
                 List<Criteria> criteriaSet = new ArrayList<>();
-                List<Wrapper> orWrappers = wrapper.getAbstractAdepts().getWrappers();
+                List<Wrapper> orWrappers = wrapper.getQueryWrapper().getWrappers();
                 if (CollectionUtils.isNotEmpty(orWrappers)) {
                     orWrappers.forEach(or -> criteriaSet.add(caseKeyValue(or)));
                     Criteria[] cs = criteriaSet.toArray(new Criteria[0]);
@@ -87,7 +87,7 @@ public class QueryHandler {
                             log.debug("集合类型 {}", value);
                         }
                         ArrayList<Object> objects = Lists.newArrayList();
-                        objects.addAll((Collection) value);
+                        objects.addAll( (Collection<?>) value);
                         criteria.and(w.getKey()).in(objects);
                     } else {
                         if (properties.isDebug()){

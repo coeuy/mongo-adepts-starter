@@ -33,7 +33,7 @@ public abstract class WrapperBuilder implements Serializable {
     }
 
     protected Wrapper buildInc(String field, Object value) {
-        return new Wrapper(Option.UN_UPDATE, Lists.newArrayList(new Condition(field, value)));
+        return new Wrapper(Option.INC, Lists.newArrayList(new Condition(field, value)));
     }
     protected Wrapper buildEq(String field, Object value) {
         return new Wrapper(Option.EQ, Lists.newArrayList(new Condition(field, value)));
