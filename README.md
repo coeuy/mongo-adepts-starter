@@ -41,7 +41,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/test-db
-      
+
 # mongo-adepts 配置
 mongo-adepts:
   # debug模式
@@ -54,7 +54,7 @@ mongo-adepts:
 
 ```java
 /**
- * 用户集合 
+ * 用户集合
  * 初次使用JavaMongo提示：
  * 加@Document即表示该类为文档类，集合名默认使用该Class的SimpleName，即"User"
  */
@@ -78,8 +78,8 @@ public class User {
 
 ```java
 import com.coeuy.osp.mongo.adepts.model.query.Adepts;
-import com.coeuy.osp.mongo.adepts.model.query.LambdaQueryAdepts;
-import com.coeuy.osp.mongo.adepts.model.query.QueryAdepts;
+import com.coeuy.osp.mongo.adepts.model.query.LambdaQueryWrapper;
+import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
@@ -92,11 +92,11 @@ public class UserService {
     private MongoAdepts mongoAdepts;
 
     /**
-     * new QueryAdepts 传入 字段
+     * new QueryWrapper 传入 字段
      */
     public void getOne() {
-        QueryAdepts queryAdepts = new QueryAdepts().eq("username", "Superman");
-        User user = mongoAdepts.getOne(queryAdepts, User.class);
+        QueryWrapper queryWrapper = new QueryWrapper().eq("username", "Superman");
+        User user = mongoAdepts.getOne(queryWrapper, User.class);
         System.out.println(user);
     }
 
@@ -104,8 +104,8 @@ public class UserService {
      * 支持Lambada
      */
     public void getOneLambada() {
-        LambdaQueryAdepts<User> lambdaQueryAdepts = Adepts.<User>lambdaQuery().eq(User::getUsername, "Superman");
-        User user = mongoAdepts.getOne(lambdaQueryAdepts, User.class);
+        LambdaQueryWrapper<User> lambdaQueryWrapper = Adepts.<User>lambdaQuery().eq(User::getUsername, "Superman");
+        User user = mongoAdepts.getOne(lambdaQueryWrapper, User.class);
         System.out.println(user);
     }
 
@@ -143,11 +143,11 @@ public class UserService extends MongoService<User> {
 
 1. getById(id,entityClass) 根据文档ObjectId查询单个文档
 
-2. getOne(queryAdepts) 根据构造器条件查询文档单条记录
+2. getOne(queryWrapper) 根据构造器条件查询文档单条记录
 
 3. list(entityClass) 查询指定集合全部文档
 
-4. list(queryAdepts) 根据构造器条件查询多个文档
+4. list(queryWrapper,entityClass) 根据构造器条件查询多个文档
 
 5. listByIds(idList,entityClass) 根据文档多个ObjectId查询多个文档
 
@@ -157,23 +157,23 @@ public class UserService extends MongoService<User> {
 
 8. save(entity) 保存单条文档（注意：⚠️这里会保存为null的属性）
 
-9. update(queryAdepts) 根据条件构造器更新单个文档
+9. update(queryWrapper) 根据条件构造器更新单个文档
 
-10. updateMulti(queryAdepts) 根据条件构造器更新多个文档MONGO_ID
+10. updateMulti(queryWrapper) 根据条件构造器更新多个文档MONGO_ID
 
-11. delete(queryAdepts) 根据条件删除文档(注意：⚠️这里会删除满足条件的所有文档而不是删除单个文档)
+11. delete(queryWrapper) 根据条件删除文档(注意：⚠️这里会删除满足条件的所有文档而不是删除单个文档)
 
 12. deleteAll(entityClass) 删除集合所有文档
 
-13. count(queryAdepts) 根据条件构造器查询集合文档数量
+13. count(queryWrapper) 根据条件构造器查询集合文档数量
 
-14. exists(queryAdepts) 根据条件构造器查询文档是否存在
+14. exists(queryWrapper) 根据条件构造器查询文档是否存在
 
 15. exists(entityClass) 查询集合是否存在
 
 16. page(pageInfo,entityClass) 无条件分页查询
 
-17. page(pageInfo,queryAdepts) 根据条件构造器分页查询
+17. page(pageInfo,queryWrapper) 根据条件构造器分页查询
 
 ### 调用 mongoTemplate
 
@@ -183,61 +183,61 @@ public class UserService extends MongoService<User> {
 ```
 
 
-### QueryAdepts 条件构造器
+### QueryWrapper 条件构造器
 
 1. `eq(String key, Object value)` 等于
 
 
 2. `ne(String key, Object value)` 不等于
-   
+
 
 3. `in(String key, Object value)` 匹配多个
 
 
 4. `ge(String key, Object value)` 大于等于
-   
+
 
 5. `gt(String key, Object value)` 小于等于
-   
+
 
 6. `le(String key, Object value)` 大于
-   
+
 
 7. `lt(String key, Object value)` 小于
-   
+
 
 8. `geAndLe(String key, Object ge, Object le)` 范围查询（能够比较的值)
-   
+
 
 9. `like(String key, CharSequence keyword)` 模糊匹配（`*keyword*`）
-   
+
 
 10. `likeLeft(String key, CharSequence keyword)`模糊匹配左边（`keyword*`）
-    
+
 
 11. `likeLeft(String key, CharSequence keyword)`模糊匹配右边（`*keyword`）
-    
+
 
 12. `orderByDesc(String key)` 根据指定Key降序
-    
+
 
 12. `orderByAsc(String key)` 根据指定的Key生序
-    
+
 
 13. `update(String key, Object value)` 更新指定文档属性
-    
+
 
 14. `search(String value)` 索引搜索，建立全文索引的情况下生效
-    
+
 
 15. `push(String key, Object value)` 追加子文档
-    
+
 
 15. `pull(String key, Object value)` 删除子文档
-    
+
 
 15. `or(QueryWrapper<T> wrapper)` Or 条件
-    
+
 
 15. `inc(String key,Integer number)` 字段加减法
 
