@@ -67,7 +67,7 @@ public class UpdateHandler {
                     wrapper.getConditions().forEach(w -> update.unset(w.getKey()));
                     break;
                 case INC:
-                    wrapper.getConditions().forEach(w -> update.inc(w.getKey(), (int) w.getValue()));
+                    wrapper.getConditions().forEach(w -> update.inc(w.getKey(), (long) w.getValue()));
                     break;
                 default:
                     break;
