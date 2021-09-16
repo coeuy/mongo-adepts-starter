@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
@@ -33,6 +34,7 @@ public class PageResult<T> implements Serializable {
     protected long total;
 
     protected long pages;
+
 
     public PageResult() {
         this.records = Collections.emptyList();
@@ -70,6 +72,13 @@ public class PageResult<T> implements Serializable {
         } else {
             this.pages = (int) (total / (long) pageable.getPageSize()) + 1;
         }
+    }
+
+    public PageResult(List<T> records, Pageable pageable) {
+        this.records = records;
+        this.total = 0;
+        this.current = pageable.getPageNumber();
+        this.size = records.size();
     }
     public PageResult(List<T> records, long total,long size,long current) {
         this.records = records;

@@ -4,15 +4,19 @@ import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.exception.MongoAdeptsException;
 import com.coeuy.osp.mongo.adepts.handler.QueryHandler;
 import com.coeuy.osp.mongo.adepts.handler.UpdateHandler;
+import com.coeuy.osp.mongo.adepts.model.next.NextResult;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageQuery;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
+import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.lang.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.MongoCollectionUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,9 +29,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.support.MappingMongoEntityInformation;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
@@ -116,6 +117,15 @@ public abstract class AbstractAdepts {
         return Lists.newArrayList(allByIds);
     }
 
+    /**
+     * 传统分页（无条件）
+     * 注意⚠️：此方法效率低下，大量数据翻页查询建议使用 Next 方法
+     *
+     * @param pageInfo    分页信息
+     * @param entityClass 实体对象
+     * @param <T>         类型
+     * @return page
+     */
     public <T> PageResult<T> page(PageInfo pageInfo, Class<T> entityClass) {
         if (properties.isDebug()) {
             log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "无条件查询集合[" + entityClass.getSimpleName() + "]分页，第：" + pageInfo.getCurrent() + "页，页个数：" + pageInfo.getSize() + "个");
@@ -126,6 +136,60 @@ public abstract class AbstractAdepts {
         long total = mongoTemplate.count(new Query(), entityClass, collectionName);
         return new PageResult<>(list, total, page);
     }
+
+    public <T> NextResult<T> next(boolean isDesc, String startId, long size, Class<T> entityClass) {
+        Sort sort = Sort.by(isDesc ? Sort.Direction.DESC : Sort.Direction.ASC, "_id");
+        Query query = new Query();
+        if (StringUtils.isNotBlank(startId) && !StringUtils.EMPTY.equals(startId)) {
+            ObjectId objectId = new ObjectId(startId);
+            query.addCriteria(isDesc ? Criteria.where("_id").lt(objectId) : Criteria.where("_id").gt(objectId));
+        }
+        if (properties.isDebug()) {
+            log.info("根据ID增量查询 {} DESC:{}, StartId:{} ,Size:{}", entityClass.getSimpleName(), isDesc, startId, size);
+        }
+        List<T> list = mongoTemplate.find(query.with(sort).limit((int) size), entityClass);
+        return NextResult.result(list, startId);
+    }
+
+
+    public <T> NextResult<T> next(QueryWrapper queryWrapper, boolean isDesc, String startId, long size, Class<T> entityClass) {
+        Sort sort = Sort.by(isDesc ? Sort.Direction.DESC : Sort.Direction.ASC, "_id");
+        Query query = queryHandler.parse(queryWrapper);
+        if (StringUtils.isNotBlank(startId) && !StringUtils.EMPTY.equals(startId)) {
+            ObjectId objectId = new ObjectId(startId);
+            query.addCriteria(isDesc ? Criteria.where("_id").lt(objectId) : Criteria.where("_id").gt(objectId));
+        }
+        if (properties.isDebug()) {
+            log.info("根据ID增量条件查询:\n{} DESC:{}, StartId:{} ,Size:{}", queryWrapper.getSrt(entityClass, "NEXT"), isDesc, startId, size);
+        }
+        List<T> list = mongoTemplate.find(query.with(sort).limit((int) size), entityClass);
+        return NextResult.result(list, startId);
+    }
+
+    public <T> NextResult<T> next(Query query, boolean isDesc, String startId, long size, Class<T> entityClass) {
+        Sort sort = Sort.by(isDesc ? Sort.Direction.DESC : Sort.Direction.ASC, "_id");
+        if (StringUtils.isNotBlank(startId) && !StringUtils.EMPTY.equals(startId)) {
+            ObjectId objectId = new ObjectId(startId);
+            query.addCriteria(isDesc ? Criteria.where("_id").lt(objectId) : Criteria.where("_id").gt(objectId));
+        }
+        if (properties.isDebug()) {
+            log.info("根据ID增量query条件查询 {} DESC:{}, StartId:{} ,Size:{}", entityClass.getSimpleName(), isDesc, startId, size);
+        }
+        List<T> list = mongoTemplate.find(query.with(sort).limit((int) size), entityClass);
+        return NextResult.result(list, startId);
+    }
+
+
+    /**
+     * 传统分页
+     * 注意⚠️：此方法效率低下，大量数据查询建议使用 Next 方法
+     *
+     * @param pageInfo     分页信息
+     * @param queryWrapper 查询条件
+     * @param entityClass  实体对象
+     * @param <T>          类型
+     * @return page
+     */
     public <T> PageResult<T> page(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass) {
         if (properties.isDebug()) {
             log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "查询集合[" + entityClass.getSimpleName() + "]分页，第：" + pageInfo.getCurrent() + "页，页个数：" + pageInfo.getSize() + "个");
@@ -140,6 +204,43 @@ public abstract class AbstractAdepts {
         PageQuery page = PageQuery.page(pageInfo);
         List<T> list = mongoTemplate.find(query.with(page), entityClass, collectionName);
         return new PageResult<>(list, total, page);
+    }
+
+    /**
+     * 分页不查 count
+     * 方法说明：相对分页查 count 的效率会更高一些，测试下如果 count不走索引的话 500W+数据需要15秒以上
+     * 此方法是基于 skip(?) limit(?)  当翻页越往后，查询速度就越慢。  当skip值大于1W 时效率非常低下
+     * 一次分页查询3-5秒，如果是skip大于 10W 则更加严重 测试过500W订单数据一次分页查询可以到20秒以上。
+     * 所以建议：如果该集合的数据很大而且不是强制性业务需求，可以考虑 next 方法
+     *
+     * @param pageInfo    分页信息
+     * @param entityClass 集合实体
+     * @param <T>         类型
+     * @return 无 count 的传统分页
+     */
+    public <T> PageResult<T> pageNoCount(PageInfo pageInfo, Class<T> entityClass) {
+        if (properties.isDebug()) {
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "无Count分页查询集合[" + entityClass.getSimpleName() + "]分页，第：" + pageInfo.getCurrent() + "页，页个数：" + pageInfo.getSize() + "个");
+        }
+        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
+        PageQuery page = PageQuery.page(pageInfo);
+        List<T> list = mongoTemplate.find(new Query().with(page), entityClass, collectionName);
+        return new PageResult<>(list, page);
+    }
+
+    public <T> PageResult<T> pageNoCount(PageInfo pageInfo, QueryWrapper queryWrapper, Class<T> entityClass) {
+
+        if (properties.isDebug()) {
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "无Count分页条件查询集合[" + entityClass.getSimpleName() + "]分页，第：" + pageInfo.getCurrent() + "页，页个数：" + pageInfo.getSize() + "个");
+        }
+        Query query = queryHandler.parse(queryWrapper);
+        if (queryWrapper.getTextSearch() != null) {
+            query.addCriteria(TextCriteria.forDefaultLanguage().matching(queryWrapper.getTextSearch()));
+        }
+        String collectionName = MongoCollectionUtils.getPreferredCollectionName(entityClass);
+        PageQuery page = PageQuery.page(pageInfo);
+        List<T> list = mongoTemplate.find(query.with(page), entityClass, collectionName);
+        return new PageResult<>(list, page);
     }
 
     public <T> T insert(T entity) {

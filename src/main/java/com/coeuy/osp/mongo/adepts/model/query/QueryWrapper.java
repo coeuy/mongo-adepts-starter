@@ -1,6 +1,7 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
 import com.coeuy.osp.mongo.adepts.constants.Option;
+import com.coeuy.osp.mongo.adepts.utils.CollectionUtils;
 import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,6 +56,9 @@ public class QueryWrapper extends WrapperBuilder implements Serializable {
             for (Wrapper wrapper : wrappers) {
                 StringBuilder s1 = new StringBuilder(i + ".(");
                 String cnName = wrapper.getOption().getCnName();
+                if (CollectionUtils.isEmpty(wrapper.getConditions())){
+                    continue;
+                }
                 for (Condition condition : wrapper.getConditions()) {
                     s1.append(condition.getKey()).append(" ").append(cnName).append(" ").append(condition.getValue()).append(")\n");
                 }

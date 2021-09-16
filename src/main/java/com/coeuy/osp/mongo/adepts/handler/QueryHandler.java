@@ -42,9 +42,9 @@ public class QueryHandler {
         }
         queryWrapper.getWrappers().forEach(q -> {
             if (q.getOption() == Option.ORDER_BY_ASC) {
-                q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.ASC, w.getKey())));
+                q.getConditions().forEach(w -> query.with(Sort.by(new Sort.Order(Sort.Direction.ASC, w.getKey()))));
             }else if (q.getOption() == Option.ORDER_BY_DESC) {
-                q.getConditions().forEach(w -> query.with(Sort.by(Sort.Direction.DESC, w.getKey())));
+                q.getConditions().forEach(w -> query.with(Sort.by(new Sort.Order(Sort.Direction.DESC, w.getKey()))));
             }
         });
         return query;
