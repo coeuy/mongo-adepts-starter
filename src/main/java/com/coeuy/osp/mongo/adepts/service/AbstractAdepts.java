@@ -1,5 +1,6 @@
 package com.coeuy.osp.mongo.adepts.service;
 
+import com.coeuy.osp.mongo.adepts.config.FieldGetter;
 import com.coeuy.osp.mongo.adepts.config.MongoAdeptsProperties;
 import com.coeuy.osp.mongo.adepts.exception.MongoAdeptsException;
 import com.coeuy.osp.mongo.adepts.handler.QueryHandler;
@@ -403,4 +404,14 @@ public abstract class AbstractAdepts {
         return PageResult.page(aggregate.getMappedResults(), count, page.getPageNumber(), page.getPageSize(), page.getOffset());
     }
 
+
+    @SuppressWarnings("unchecked")
+    public abstract <T> boolean updateById(T t);
+
+    public abstract <T> boolean updateByIdSkipNull(T t);
+
+    @SuppressWarnings("unchecked")
+    public abstract <T> boolean lambdaUpdateById(T t, FieldGetter<T, ?>... fieldGetters);
+
+    public abstract <T> boolean lambdaUpdateByIdSkipNull(T t, FieldGetter<T, ?>... fieldGetters);
 }

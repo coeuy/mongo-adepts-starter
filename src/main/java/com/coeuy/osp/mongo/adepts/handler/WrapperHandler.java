@@ -57,7 +57,7 @@ public class WrapperHandler {
      * @return boolean
      */
     public boolean verifyConditionNoBlank(QueryWrapper queryWrapper) {
-        return verifyOptionNoBlank(queryWrapper, EQ, LIKE, LIKE_LEFT, LIKE_RIGHT, NE, GE, SCOPE, LE, IN, NOT_IN);
+        return verifyOptionNoBlank(queryWrapper, EQ, LIKE, LIKE_LEFT, LIKE_RIGHT, NE, GE, SCOPE,PHASE, LE, IN, NOT_IN);
     }
 
     public boolean verifyConditionIsBlank(QueryWrapper queryWrapper) {

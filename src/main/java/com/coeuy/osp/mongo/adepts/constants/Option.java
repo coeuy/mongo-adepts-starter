@@ -34,7 +34,8 @@ public enum Option implements Serializable {
     PULL("删除子文档","pull"),
     GROUP_BY("分组","group"),
     SCOPE("范围查询","scope"),
-    LIKE("模糊查询","like");
+    LIKE("模糊查询","like"),
+    PHASE("分段查询","phase");
 
     private final String cnName;
 

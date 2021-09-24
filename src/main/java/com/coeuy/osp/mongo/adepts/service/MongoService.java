@@ -1,5 +1,6 @@
 package com.coeuy.osp.mongo.adepts.service;
 
+import com.coeuy.osp.mongo.adepts.config.FieldGetter;
 import com.coeuy.osp.mongo.adepts.model.page.PageInfo;
 import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
@@ -71,6 +72,12 @@ public class MongoService<T> {
 
     public T save(T t) {
         return mongoAdepts.save(t);
+    }
+
+    @SafeVarargs
+    public final boolean lambdaUpdateById(T t, FieldGetter<T, ?>... fieldGetters) {
+        // 遍历字段
+        return mongoAdepts.lambdaUpdateById(t,fieldGetters);
     }
 
     public boolean update(QueryWrapper queryWrapper) {

@@ -59,6 +59,10 @@ public abstract class WrapperBuilder implements Serializable {
     protected Wrapper buildScope(String field, Object ge, Object le) {
         return new Wrapper(Option.SCOPE, field,ge,le);
     }
+
+    protected Wrapper buildPhase(String field, Object ge, Object lt) {
+        return new Wrapper(Option.PHASE, field,ge,lt);
+    }
     protected Wrapper buildLike(String field, Object value) {
         return new Wrapper(Option.LIKE, Lists.newArrayList(new Condition(field, value)));
     }

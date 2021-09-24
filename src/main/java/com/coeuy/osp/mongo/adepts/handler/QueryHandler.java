@@ -104,6 +104,13 @@ public class QueryHandler {
                 criteria.andOperator(Criteria.where(wrapper.getKey()).gte(wrapper.getVar1()),
                         Criteria.where(wrapper.getKey()).lte(wrapper.getVar2()));
                 break;
+            case PHASE:
+                if (properties.isDebug()){
+                    log.debug("分段取值 {}", wrapper);
+                }
+                criteria.andOperator(Criteria.where(wrapper.getKey()).gte(wrapper.getVar1()),
+                        Criteria.where(wrapper.getKey()).lt(wrapper.getVar2()));
+                break;
             case NE:
                 wrapper.getConditions().forEach(w -> criteria.and(w.getKey()).ne(w.getValue()));
                 break;

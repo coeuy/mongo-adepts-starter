@@ -1,6 +1,11 @@
 package com.coeuy.osp.mongo.adepts.utils;
 
 import com.coeuy.osp.mongo.adepts.constants.BasicType;
+import com.google.common.collect.Lists;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -11,6 +16,23 @@ import com.coeuy.osp.mongo.adepts.constants.BasicType;
  * @date 2021/9/9
  */
 public class ClassUtils {
+
+
+    /**
+     * 递归获取类字段（包含父类）
+     * @param clazz 类
+     * @param fields 字段
+     * @param <T> 类型
+     * @return 字段列表
+     */
+    public static <T> List<Field> getClassFields(Class<? super T> clazz, List<Field> fields){
+        if (Objects.nonNull(clazz)){
+            fields.addAll(Lists.newArrayList(clazz.getDeclaredFields()));
+            return getClassFields(clazz.getSuperclass(),fields);
+        }
+        return fields;
+    }
+
     public static boolean isAllAssignableFrom(Class<?>[] types1, Class<?>[] types2) {
         if (ArrayUtil.isEmpty(types1) && ArrayUtil.isEmpty(types2)) {
             return true;
@@ -33,7 +55,7 @@ public class ClassUtils {
                 if (BasicType.unWrap(type1) != BasicType.unWrap(type2)) {
                     return false;
                 }
-            } else if (false == type1.isAssignableFrom(type2)) {
+            } else if (!type1.isAssignableFrom(type2)) {
                 return false;
             }
         }
