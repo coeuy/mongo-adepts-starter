@@ -25,7 +25,6 @@ public class MongoAdeptsProperties {
      */
     private boolean debug;
 
-
     public MongoAdeptsProperties() {
         System.out.println(".    .                         .       .          .      \n" +
                 "|\\  /|                        / \\      |         _|_     \n" +

@@ -1,5 +1,7 @@
 package com.coeuy.osp.mongo.adepts.model.query;
 
+import com.coeuy.osp.mongo.adepts.config.FieldGetter;
+
 import java.io.Serializable;
 
 /**
@@ -79,6 +81,8 @@ public interface Query<R> extends Serializable {
      * @return Query
      */
     QueryWrapper scope(R column, Object ge, Object le);
+
+    QueryWrapper phase(R column, Object ge, Object lt);
 
     /**
      * 模糊匹配(全部)

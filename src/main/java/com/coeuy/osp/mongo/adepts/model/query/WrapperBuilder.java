@@ -77,6 +77,6 @@ public abstract class WrapperBuilder implements Serializable {
     }
 
     protected Wrapper buildOrderDesc(String field) {
-        return new Wrapper(Option.UN_UPDATE, Lists.newArrayList(new Condition(field,null)));
+        return new Wrapper(Option.ORDER_BY_DESC, Lists.newArrayList(new Condition(field,null)));
     }
 }

@@ -24,7 +24,7 @@ public enum Option implements Serializable {
     INC("加减","inc"),
     NOT_IN("不包含","not in"),
     ORDER_BY_ASC("正序排序","order by asc"),
-    ORDER_BY_DESC("正序排序","order by desc"),
+    ORDER_BY_DESC("倒序排序","order by desc"),
     HAVING("含有","having"),
     LIKE_LEFT("模糊查询(左)","like left"),
     LIKE_RIGHT("模糊查询(右)","kike right"),

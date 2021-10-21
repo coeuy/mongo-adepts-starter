@@ -133,6 +133,7 @@ public class QueryWrapper extends WrapperBuilder implements Serializable {
         this.wrappers.add(new Wrapper(Option.SCOPE, key, ge, le));
         return this;
     }
+
     public QueryWrapper phase(String key, Object ge, Object lt) {
         this.wrappers.add(new Wrapper(Option.PHASE, key, ge, lt));
         return this;

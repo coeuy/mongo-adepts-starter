@@ -104,6 +104,12 @@ public class LambdaQueryAdepts<T>  extends QueryWrapper implements Query<FieldGe
         return this;
     }
 
+    @Override
+    public LambdaQueryAdepts<T>  phase(FieldGetter<T, ?> column, Object ge, Object lt) {
+        this.wrappers.add(buildScope(LambdaUtils.getFieldName(column), ge, lt));
+        return this;
+    }
+
 
     @Override
     public LambdaQueryAdepts<T> like(FieldGetter<T, ?> column, CharSequence keyword) {
