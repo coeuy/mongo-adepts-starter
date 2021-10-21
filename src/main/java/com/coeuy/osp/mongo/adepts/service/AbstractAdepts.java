@@ -245,18 +245,25 @@ public abstract class AbstractAdepts {
     }
 
     public <T> T insert(T entity) {
-        log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n新增单个文档:\n" + entity.toString());
+        if (properties.isDebug()){
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n新增单个文档:\n" + entity.toString());
+        }
         return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
     }
 
     public <T> boolean insertBatch(Collection<T> entityList) {
-        log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n批量新增文档:\n" + entityList.toString());
+        if (properties.isDebug()){
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n批量新增文档:\n" + entityList.toString());
+        }
         Collection<T> ts = mongoTemplate.insertAll(entityList);
         return ts.size() == entityList.size();
     }
 
     public <T> T save(T entity) {
-        log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n保存或更新:\n" + entity.toString());
+        if (properties.isDebug()){
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n保存或更新:\n" + entity.toString());
+
+        }
         return mongoTemplate.save(entity);
     }
 
@@ -336,7 +343,9 @@ public abstract class AbstractAdepts {
     }
 
     public <T> int count( Class<T> entityClass) {
-        log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n查询文档["+entityClass.getSimpleName()+"]总条数");
+        if (properties.isDebug()){
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n查询文档["+entityClass.getSimpleName()+"]总条数");
+        }
         return (int) mongoTemplate.estimatedCount(entityClass);
     }
 
