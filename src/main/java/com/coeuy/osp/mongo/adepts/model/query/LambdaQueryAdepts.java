@@ -178,6 +178,11 @@ public class LambdaQueryAdepts<T>  extends QueryWrapper implements Query<FieldGe
         return this;
     }
 
+    /**
+     *
+     * @param wrapper
+     * @return
+     */
     public LambdaQueryAdepts<T> or(LambdaQueryAdepts<T> wrapper) {
         this.wrappers.add(new Wrapper(Option.OR, wrapper));
         return this;
