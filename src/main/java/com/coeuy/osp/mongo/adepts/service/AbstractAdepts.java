@@ -12,6 +12,7 @@ import com.coeuy.osp.mongo.adepts.model.page.PageResult;
 import com.coeuy.osp.mongo.adepts.model.query.QueryWrapper;
 import com.coeuy.osp.mongo.adepts.utils.StringUtils;
 import com.google.common.collect.Lists;
+import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.lang.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.MongoCollectionUtils;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -250,11 +252,34 @@ public abstract class AbstractAdepts {
         }
         return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
     }
-    public <T> Collection<T> insert(Collection<T> entityList) {
-        if (properties.isDebug()){
-            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n批量新增文档:\n" + entityList);
-        }
-        return mongoTemplate.insert(entityList);
+
+
+    /**
+     * 按顺序执行批量插入操作。第一个错误将取消处理。
+     * @param entityList
+     * @param <T>
+     * @return
+     */
+    public <T> BulkWriteResult insertBatchOrdered(Collection<T> entityList){
+        String collection = getCollectionName(ClassUtils.getUserClass(entityList));
+        BulkOperations operations = mongoTemplate.
+        bulkOps(BulkOperations.BulkMode.ORDERED, collection);
+        operations.insert(entityList);
+        return operations.execute();
+    }
+
+    /**
+     * 并行执行批量插入操作。在出现错误时将继续处理。
+     * @param entityList
+     * @param <T>
+     * @return
+     */
+    public <T> BulkWriteResult insertBatchUnordered(Collection<T> entityList){
+        String collection = getCollectionName(ClassUtils.getUserClass(entityList));
+        BulkOperations operations = mongoTemplate.
+        bulkOps(BulkOperations.BulkMode.UNORDERED, collection);
+        operations.insert(entityList);
+        return operations.execute();
     }
 
     public <T> boolean insertBatch(Collection<T> entityList) {
