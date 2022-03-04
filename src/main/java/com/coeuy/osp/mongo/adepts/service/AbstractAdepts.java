@@ -250,6 +250,12 @@ public abstract class AbstractAdepts {
         }
         return mongoTemplate.insert(entity, getCollectionName(ClassUtils.getUserClass(entity)));
     }
+    public <T> Collection<T> insert(Collection<T> entityList) {
+        if (properties.isDebug()){
+            log.info("\n\nADEPTS DEBUG MONITOR：{}\n", "\n批量新增文档:\n" + entityList);
+        }
+        return mongoTemplate.insert(entityList);
+    }
 
     public <T> boolean insertBatch(Collection<T> entityList) {
         if (properties.isDebug()){
